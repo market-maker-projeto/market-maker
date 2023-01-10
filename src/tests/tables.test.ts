@@ -56,4 +56,13 @@ describe("POSt/tables", () => {
     expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(409);
   });
+
+  test("POST /tables - Should not be able to create table not being admin", async () => {
+    const response = await request(app).post(baseUrl).send(createTableValid);
+
+    expect(response.body).toHaveProperty("message");
+    expect(response.status).toBe(403);
+  });
+
+ 
 });
