@@ -2,7 +2,12 @@ import request from "supertest";
 import { DataSource } from "typeorm";
 import app from "../app";
 import AppDataSource from "../data-source";
-import { createUserValid } from "./mocks/users.mock";
+import {
+  createUserValid,
+  mockedAdm,
+  mockedAdmLogin,
+  mockedUserLogin,
+} from "./mocks/users.mock";
 
 describe("POST/users", () => {
   let connection: DataSource;
@@ -43,10 +48,8 @@ describe("POST/users", () => {
   });
 
   test("GET /users - Must be able to list users", async () => {
-    await request(app).post("/users").send(createUserValid);
-    const admLoginResp = await request(app)
-      .post("/login")
-      .send(createUserValid);
+    await request(app).post("/users").send(mockedAdm);
+    const admLoginResp = await request(app).post("/login").send(mockedAdmLogin);
     const response = await request(app)
       .get("/users")
       .set("Authorization", `Bearer ${admLoginResp.body.token}`);
@@ -60,5 +63,17 @@ describe("POST/users", () => {
 
     expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(401);
+  });
+
+  test("GET /users - should not be able to list users not being admin", async () => {
+    const userLoginResp = await request(app)
+      .post("/login")
+      .send(mockedUserLogin);
+    const response = await request(app)
+      .get("/users")
+      .set("Authorization", `Bearer ${userLoginResp.body.token}`);
+
+    expect(response.body).toHaveProperty("message");
+    expect(response.status).toBe(403);
   });
 });
