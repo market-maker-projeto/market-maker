@@ -26,7 +26,7 @@ describe("POST /tables", () => {
   test("POST /tables - Must be able to register a table", async () => {
     const adminLoginResponse = await request(app)
       .post(baseUrl)
-      .send(mockedAdmin);
+      .send(mockedAdminLogin);
 
     const response = await request(app)
       .post(baseUrl)
@@ -43,7 +43,7 @@ describe("POST /tables", () => {
   test("POST /tables - Should not be able to create a table that already exists", async () => {
     const adminLoginResponse = await request(app)
       .post("/login")
-      .send(mockedAdmin);
+      .send(mockedAdminLogin);
 
     const response = await request(app)
       .post(baseUrl)
@@ -78,7 +78,7 @@ describe("POST /tables", () => {
   test("GET /tables - Must be able to list all tables", async () => {
     const adminLoginResponse = await request(app)
       .post("/login")
-      .send(mockedAdmin);
+      .send(mockedAdminLogin);
 
     const response = await request(app)
       .get(baseUrl)
@@ -91,7 +91,7 @@ describe("POST /tables", () => {
   test("GET /tables/:id - It should be possible to list a specific table", async () => {
     const adminLoginResponse = await request(app)
       .post("/login")
-      .send(mockedAdmin);
+      .send(mockedAdminLogin);
 
     const response = await request(app)
       .get(baseUrl)
@@ -104,7 +104,7 @@ describe("POST /tables", () => {
   test("GET /tables - Should not be able to list table not being admin", async () => {
     const adminLoginResponse = await request(app)
       .post("/login")
-      .send(mockedAdmin);
+      .send(mockedAdminLogin);
 
     const response = await request(app)
       .get(baseUrl)
@@ -117,7 +117,7 @@ describe("POST /tables", () => {
   test("PATCH /tables/:id -  Should not be able to update table without authentication", async () => {
     const adminLoginResponse = await request(app)
       .post("/login")
-      .send(mockedAdmin);
+      .send(mockedAdminLogin);
     const tableTobeUpdate = await request(app)
       .get(baseUrl)
       .set("Authorization", `Bearer ${adminLoginResponse.body.token}`);
@@ -194,7 +194,7 @@ describe("POST /tables", () => {
   test("DELETE /tables/:id -  Must be able to soft delete table", async () => {
     const adminLoginResponse = await request(app)
       .post("/login")
-      .send(mockedAdmin);
+      .send(mockedAdminLogin);
 
     const tableTobeDeleted = await request(app)
       .get(baseUrl)
@@ -215,7 +215,7 @@ describe("POST /tables", () => {
   test("DELETE /tables/:id -  should not be able to delete table without authentication", async () => {
     const adminLoginResponse = await request(app)
       .post("/login")
-      .send(mockedAdmin);
+      .send(mockedAdminLogin);
 
     const tableTobeDeleted = await request(app)
       .get(baseUrl)
