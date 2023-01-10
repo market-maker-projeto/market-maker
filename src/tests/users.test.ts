@@ -152,4 +152,38 @@ describe("POST/users", () => {
     expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(401);
   });
+
+  test("DELETE /users/:id -  Must be able to soft delete user", async () => {
+    await request(app).post("/users").send(mockedAdmin);
+
+    const adminLoginResp = await request(app)
+      .post("/login")
+      .send(mockedAdminLogin);
+    const userTobeDeleted = await request(app)
+      .get("/users")
+      .set("Authorization", `Bearer ${adminLoginResp.body.token}`);
+
+    const response = await request(app)
+      .delete(`/users/${userTobeDeleted.body[0].id}`)
+      .set("Authorization", `Bearer ${adminLoginResp.body.token}`);
+    const findUser = await request(app)
+      .get("/users")
+      .set("Authorization", `Bearer ${adminLoginResp.body.token}`);
+    expect(response.status).toBe(204);
+    expect(findUser.body[0].isActive).toBe(false);
+  });
+
+  test("DELETE /users/:id -  should not be able to delete user with invalid id", async () => {
+    await request(app).post("/users").send(mockedAdmin);
+
+    const adminLoginResp = await request(app)
+      .post("/login")
+      .send(mockedAdminLogin);
+
+    const response = await request(app)
+      .delete(`/users/13970660-5dbe-423a-9a9d-5c23b37943cf`)
+      .set("Authorization", `Bearer ${adminLoginResp.body.token}`);
+    expect(response.status).toBe(404);
+    expect(response.body).toHaveProperty("message");
+  });
 });
