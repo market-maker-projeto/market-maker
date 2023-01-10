@@ -85,7 +85,30 @@ describe("POST/category", () => {
     const response = await  request(app).patch(`/category/${categoryToBeUpdatedId}`).set("Authorization", userToken).send(newValues)
 
     expect(response.body).toHaveProperty("message")
-    expect(response.status).toBe(401)
+    expect(response.status).toBe(403)
+  })
+
+  test("DELETE /category - should be able to delete a category", async () => {
+    const adminLoginResponse = await request(app).post("/login").send(mockedAdminLogin);
+    const adminToken = `Bearer ${adminLoginResponse.body.token}`
+    const categoryToBeDeleted = await request(app).get("category").set("Authorization", adminToken)
+    
+    const response = await request(app).delete(`/users/${categoryToBeDeleted.body[0].id}`).set("Authorization", `Bearer ${adminToken}`)
+    
+    expect(response.status).toBe(204)
+  })
+
+  test("DELETE /category - should not be able to delete a category not being admin", async() => {
+    const adminLoginResponse = await request(app).post("/login").send(mockedAdminLogin);
+    const adminToken = `Bearer ${adminLoginResponse.body.token}`
+    const categoryToBeDeleted = await request(app).get("category").set("Authorization", adminToken)
+    const userLoginResponse = await request(app).post("/login").send(mockedUserLogin);
+    const userToken = `Bearer ${userLoginResponse.body.token}`
+
+    const response = await request(app).delete(`/users/${categoryToBeDeleted.body[0].id}`).set("Authorization", `Bearer ${userToken}`)
+    
+    expect(response.body).toHaveProperty("message")
+    expect(response.status).toBe(403)
   })
 
 });
