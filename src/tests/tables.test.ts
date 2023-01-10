@@ -151,4 +151,23 @@ describe("POST /tables", () => {
     expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(401);
   });
+  
+  test("DELETE /tables/:id -  should not be able to delete table not being admin", async () => {
+    const userLoginResponse = await request(app)
+      .post("/login")
+      .send(createTableValid);
+    const adminLoginResponse = await request(app)
+      .post("/login")
+      .send(mockedAdminLogin);
+    const UserTobeDeleted = await request(app)
+      .get(baseUrl)
+      .set("Authorization", `Bearer ${adminLoginResponse.body.token}`);
+
+    const response = await request(app)
+      .delete(`/users/${UserTobeDeleted.body[0].id}`)
+      .set("Authorization", `Bearer ${userLoginResponse.body.token}`);
+
+    expect(response.body).toHaveProperty("message");
+    expect(response.status).toBe(403);
+  });
 });
