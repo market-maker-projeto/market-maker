@@ -164,7 +164,7 @@ describe("POST /tables", () => {
       .set("Authorization", `Bearer ${adminLoginResponse.body.token}`);
 
     const response = await request(app)
-      .delete(`/users/${UserTobeDeleted.body[0].id}`)
+      .delete(`/tables/${UserTobeDeleted.body[0].id}`)
       .set("Authorization", `Bearer ${userLoginResponse.body.token}`);
 
     expect(response.body).toHaveProperty("message");
