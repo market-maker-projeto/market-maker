@@ -62,13 +62,30 @@ describe("POST/category", () => {
 
     const categoryUpdated = await request(app).get("category").set("Authorization", token)
 
-    expect(categoryUpdated.status).toBe(200)
+    expect(response.status).toBe(200)
     expect(categoryUpdated.body[0]).toEqual(
         expect.objectContaining({
             name: "",
             id: "",
         })
     )
+  })
+  test("PATCH /category - should not be able to edit a category not being admin", async () => {
+    const newValues = {name: "Alimentação"}
+
+
+    const adminLoginResponse = await request(app).post("/login").send(mockedAdminLogin);
+    const userLoginResponse = await request(app).post("/login").send(mockedUserLogin);
+    const adminToken = `Bearer ${adminLoginResponse.body.token}`
+    const userToken = `Bearer ${userLoginResponse.body.token}`
+
+    const categoryToBeUpdated = await request(app).get("category").set("Authorization", adminToken)
+    const categoryToBeUpdatedId = categoryToBeUpdated.body[0].id
+
+    const response = await  request(app).patch(`/category/${categoryToBeUpdatedId}`).set("Authorization", userToken).send(newValues)
+
+    expect(response.body).toHaveProperty("message")
+    expect(response.status).toBe(401)
   })
 
 });
