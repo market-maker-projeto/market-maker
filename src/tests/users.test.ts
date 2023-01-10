@@ -54,4 +54,11 @@ describe("POST/users", () => {
     expect(response.body).toHaveLength(2);
     expect(response.body[0]).not.toHaveProperty("password");
   });
+
+  test("GET /users - should not be able to list users without authentication", async () => {
+    const response = await request(app).get("/users");
+
+    expect(response.body).toHaveProperty("message");
+    expect(response.status).toBe(401);
+  });
 });
