@@ -3,7 +3,7 @@ import AppDataSource from "../data-source";
 import request from "supertest";
 import app from "../app";
 import { createTableValid } from "./mocks/tables.mock";
-import { createAdminValid } from "./mocks/users.mock";
+import { mockedAdmin } from "./mocks/users.mock";
 
 describe("POSt/tables", () => {
   let connection: DataSource;
@@ -26,7 +26,7 @@ describe("POSt/tables", () => {
   test("POST /tables - Must be able to register a table", async () => {
     const adminLoginResponse = await request(app)
       .post(baseUrl)
-      .send(createAdminValid);
+      .send(mockedAdmin);
 
     const response = await request(app)
       .post(baseUrl)
@@ -46,7 +46,7 @@ describe("POSt/tables", () => {
   test("POST /tables - Should not be able to create a table that already exists", async () => {
     const adminLoginResponse = await request(app)
       .post(baseUrl)
-      .send(createAdminValid);
+      .send(mockedAdmin);
 
     const response = await request(app)
       .post(baseUrl)
