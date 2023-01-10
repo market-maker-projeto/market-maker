@@ -114,15 +114,42 @@ describe("POST /tables", () => {
     expect(response.status).toBe(403);
   });
 
-  test("PATCH /tables/:id -  should not be able to update user without authentication",async () => {
-    const adminLoginResponse = await request(app).post("/login").send(mockedAdmin);
-    const userTobeUpdate = await request(app).get(baseUrl).set("Authorization", `Bearer ${adminLoginResponse.body.token}`)
-    const response = await request(app).patch(`/tables/${userTobeUpdate.body[0].id}`)
+  test("PATCH /tables/:id -  should not be able to update table without authentication", async () => {
+    const adminLoginResponse = await request(app)
+      .post("/login")
+      .send(mockedAdmin);
+    const tableTobeUpdate = await request(app)
+      .get(baseUrl)
+      .set("Authorization", `Bearer ${adminLoginResponse.body.token}`);
+    const response = await request(app).patch(
+      `/tables/${tableTobeUpdate.body[0].id}`
+    );
 
-    expect(response.body).toHaveProperty("message")
-    expect(response.status).toBe(401)
-         
-})
+    expect(response.body).toHaveProperty("message");
+    expect(response.status).toBe(401);
+  });
+
+  test("PATCH /tables/:id - should not be able to update table with invalid id", async () => {
+    const newValues = { name: "Joana Brito", email: "joanabrito@mail.com" };
+
+    const admingLoginResponse = await request(app)
+      .post("/login")
+      .send(mockedAdminLogin);
+    const token = `Bearer ${admingLoginResponse.body.token}`;
+
+    const tableTobeUpdateRequest = await request(app)
+      .get(baseUrl)
+      .set("Authorization", token);
+    const tableTobeUpdateId = tableTobeUpdateRequest.body[0].id;
+
+    const response = await request(app)
+      .patch(`${baseUrl}/13970660-5dbe-423a-9a9d-5c23b37943cf`)
+      .set("Authorization", token)
+      .send(newValues);
+
+    expect(response.body).toHaveProperty("message");
+    expect(response.status).toBe(404);
+  });
 
   test("DELETE /tables/:id -  Must be able to soft delete table", async () => {
     const adminLoginResponse = await request(app)
@@ -145,7 +172,7 @@ describe("POST /tables", () => {
     expect(response.status).toBe(401);
   });
 
-  test("DELETE /tables/:id -  should not be able to delete user without authentication", async () => {
+  test("DELETE /tables/:id -  should not be able to delete table without authentication", async () => {
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdmin);
@@ -181,14 +208,17 @@ describe("POST /tables", () => {
     expect(response.status).toBe(403);
   });
 
-  test("DELETE /tables/:id -  should not be able to delete table with invalid id",async () => {
-    await request(app).post('/login').send(mockedAdmin)
+  test("DELETE /tables/:id -  should not be able to delete table with invalid id", async () => {
+    await request(app).post("/login").send(mockedAdmin);
 
-    const adminLoginResponse = await request(app).post("/login").send(mockedAdminLogin);
-    
-    const response = await request(app).delete(`/tables/13970660-5dbe-423a-9a9d-5c23b37943cf`).set("Authorization", `Bearer ${adminLoginResponse.body.token}`)
-    expect(response.status).toBe(404)
-    expect(response.body).toHaveProperty("message")
- 
-})
+    const adminLoginResponse = await request(app)
+      .post("/login")
+      .send(mockedAdminLogin);
+
+    const response = await request(app)
+      .delete(`${baseUrl}/13970660-5dbe-423a-9a9d-5c23b37943cf`)
+      .set("Authorization", `Bearer ${adminLoginResponse.body.token}`);
+    expect(response.status).toBe(404);
+    expect(response.body).toHaveProperty("message");
+  });
 });
