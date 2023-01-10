@@ -75,4 +75,18 @@ describe("POST /tables", () => {
     expect(response.status).toBe(401);
   });
 
+  test("GET /tables - Must be able to list all tables", async () => {
+    const adminLoginResponse = await request(app)
+      .post(baseUrl)
+      .send(mockedAdmin);
+
+    const response = await request(app)
+      .get(baseUrl)
+      .set("Authorization", `Bearer ${adminLoginResponse.body.token}`);
+
+    expect(response.body).toHaveLength(1);
+    expect(response.status).toBe(200);
+  });
+
+
 });
