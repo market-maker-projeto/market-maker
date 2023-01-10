@@ -3,7 +3,7 @@ import AppDataSource from "../data-source";
 import request from "supertest";
 import app from "../app";
 import { createTableValid } from "./mocks/tables.mock";
-import { mockedAdmin } from "./mocks/users.mock";
+import { mockedAdmin, mockedAdminLogin } from "./mocks/users.mock";
 
 describe("POST /tables", () => {
   let connection: DataSource;
@@ -42,7 +42,7 @@ describe("POST /tables", () => {
 
   test("POST /tables - Should not be able to create a table that already exists", async () => {
     const adminLoginResponse = await request(app)
-      .post(baseUrl)
+      .post("/login")
       .send(mockedAdmin);
 
     const response = await request(app)
@@ -77,7 +77,7 @@ describe("POST /tables", () => {
 
   test("GET /tables - Must be able to list all tables", async () => {
     const adminLoginResponse = await request(app)
-      .post(baseUrl)
+      .post("/login")
       .send(mockedAdmin);
 
     const response = await request(app)
@@ -90,7 +90,7 @@ describe("POST /tables", () => {
 
   test("GET /tables/:id - It should be possible to list a specific table", async () => {
     const adminLoginResponse = await request(app)
-      .post(baseUrl)
+      .post("/login")
       .send(mockedAdmin);
 
     const response = await request(app)
@@ -103,7 +103,7 @@ describe("POST /tables", () => {
 
   test("GET /tables - Should not be able to list table not being admin", async () => {
     const adminLoginResponse = await request(app)
-      .post(baseUrl)
+      .post("/login")
       .send(mockedAdmin);
 
     const response = await request(app)
@@ -114,5 +114,24 @@ describe("POST /tables", () => {
     expect(response.status).toBe(403);
   });
 
+  test("DELETE /tables/:id -  Must be able to soft delete table", async () => {
+    const adminLoginResponse = await request(app)
+      .post("/login")
+      .send(mockedAdmin);
 
+    const tableTobeDeleted = await request(app)
+      .get(baseUrl)
+      .set("Authorization", `Bearer ${adminLoginResponse.body.token}`);
+
+    const response = await request(app).delete(
+      `/tables/${tableTobeDeleted.body[0].id}`
+    );
+
+    const findTable = await request(app)
+      .get(baseUrl)
+      .set("Authorization", `Bearer ${adminLoginResponse.body.token}`);
+
+    expect(findTable.body[0].isActive).toBe(false);
+    expect(response.status).toBe(401);
+  });
 });
