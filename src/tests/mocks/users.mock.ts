@@ -6,18 +6,18 @@ export const createUserValid: IUser = {
   password: "testepassword",
 };
 
-export const mockedUserLogin: IUserLogin = {
-  username: "TesteName",
-  password: "Test123",
-};
-
-export const mockedAdm: IUser = {
+export const mockedAdmin: IUser = {
   isAdmin: true,
-  username: "TesteName1",
-  password: "Test456",
+  username: "admin",
+  password: "123456",
 };
 
-export const mockedAdmLogin: IUserLogin = {
-  username: "SouAdminTest",
+export const mockedUserLogin: IUserLogin = {
+  username: "user",
+  password: "123456",
+};
+
+export const mockedAdminLogin: IUserLogin = {
+  username: "admin",
   password: "123456",
 };

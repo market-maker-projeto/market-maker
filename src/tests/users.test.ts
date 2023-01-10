@@ -4,8 +4,8 @@ import app from "../app";
 import AppDataSource from "../data-source";
 import {
   createUserValid,
-  mockedAdm,
-  mockedAdmLogin,
+  mockedAdmin,
+  mockedAdminLogin,
   mockedUserLogin,
 } from "./mocks/users.mock";
 
@@ -48,8 +48,10 @@ describe("POST/users", () => {
   });
 
   test("GET /users - Must be able to list users", async () => {
-    await request(app).post("/users").send(mockedAdm);
-    const admLoginResp = await request(app).post("/login").send(mockedAdmLogin);
+    await request(app).post("/users").send(mockedAdmin);
+    const admLoginResp = await request(app)
+      .post("/login")
+      .send(mockedAdminLogin);
     const response = await request(app)
       .get("/users")
       .set("Authorization", `Bearer ${admLoginResp.body.token}`);
@@ -75,5 +77,21 @@ describe("POST/users", () => {
 
     expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(403);
+  });
+
+  test("DELETE /users/:id - should not be able to delete user without authentication", async () => {
+    const adminLoginResp = await request(app)
+      .post("/login")
+      .send(mockedAdminLogin);
+    const userToBeDeleted = await request(app)
+      .get("/users")
+      .set("Authorization", `Bearer ${adminLoginResp.body.token}`);
+
+    const response = await request(app).delete(
+      `/users/${userToBeDeleted.body[0].id}`
+    );
+
+    expect(response.body).toHaveProperty("message");
+    expect(response.status).toBe(401);
   });
 });
