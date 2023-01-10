@@ -67,4 +67,12 @@ describe("POST /tables", () => {
     expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(401);
   });
+
+  test("POST /tables - It must not be possible to register an invalid table", async () => {
+    const response = await request(app).post(baseUrl).send(createTableValid);
+
+    expect(response.body).toHaveProperty("message");
+    expect(response.status).toBe(401);
+  });
+
 });
