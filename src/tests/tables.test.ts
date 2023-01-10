@@ -114,6 +114,16 @@ describe("POST /tables", () => {
     expect(response.status).toBe(403);
   });
 
+  test("PATCH /tables/:id -  should not be able to update user without authentication",async () => {
+    const adminLoginResponse = await request(app).post("/login").send(mockedAdmin);
+    const userTobeUpdate = await request(app).get(baseUrl).set("Authorization", `Bearer ${adminLoginResponse.body.token}`)
+    const response = await request(app).patch(`/tables/${userTobeUpdate.body[0].id}`)
+
+    expect(response.body).toHaveProperty("message")
+    expect(response.status).toBe(401)
+         
+})
+
   test("DELETE /tables/:id -  Must be able to soft delete table", async () => {
     const adminLoginResponse = await request(app)
       .post("/login")
