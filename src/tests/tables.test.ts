@@ -5,7 +5,7 @@ import app from "../app";
 import { createTableValid } from "./mocks/tables.mock";
 import { mockedAdmin } from "./mocks/users.mock";
 
-describe("POSt/tables", () => {
+describe("POST /tables", () => {
   let connection: DataSource;
   const baseUrl = "/tables";
 
