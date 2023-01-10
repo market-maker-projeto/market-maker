@@ -3,6 +3,7 @@ import AppDataSource from "../data-source";
 import request from "supertest";
 import app from "../app";
 import { createTableValid } from "./mocks/tables.mock";
+import { createAdminValid } from "./mocks/users.mock";
 
 describe("POSt/tables", () => {
   let connection: DataSource;
@@ -23,7 +24,14 @@ describe("POSt/tables", () => {
   });
 
   test("POST /tables - Must be able to register a table", async () => {
-    const response = await request(app).post(baseUrl).send(createTableValid);
+    const adminLoginResponse = await request(app)
+      .post(baseUrl)
+      .send(createAdminValid);
+
+    const response = await request(app)
+      .post(baseUrl)
+      .set("Authorization", `Bearer ${adminLoginResponse.body.token}`)
+      .send(createTableValid);
 
     expect(response.status).toBe(201);
     expect(response.body).toEqual(
@@ -33,5 +41,19 @@ describe("POSt/tables", () => {
         table_number: 7,
       })
     );
+  });
+
+  test("POST /tables - Should not be able to create a table that already exists", async () => {
+    const adminLoginResponse = await request(app)
+      .post(baseUrl)
+      .send(createAdminValid);
+
+    const response = await request(app)
+      .post(baseUrl)
+      .set("Authorization", `Bearer ${adminLoginResponse.body.token}`)
+      .send(createTableValid);
+
+    expect(response.body).toHaveProperty("message");
+    expect(response.status).toBe(409);
   });
 });
