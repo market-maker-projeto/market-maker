@@ -130,17 +130,17 @@ describe("POST /tables", () => {
   });
 
   test("PATCH /tables/:id - should not be able to update table with invalid id", async () => {
-    const newValues = { name: "Joana Brito", email: "joanabrito@mail.com" };
+    const newValues = { seats: 2, table_number: 9 };
 
     const admingLoginResponse = await request(app)
       .post("/login")
-      .send(mockedAdminLogin);
+      .send(mockedAdmin);
     const token = `Bearer ${admingLoginResponse.body.token}`;
 
     const tableTobeUpdateRequest = await request(app)
       .get(baseUrl)
       .set("Authorization", token);
-    const tableTobeUpdateId = tableTobeUpdateRequest.body[0].id;
+    // const tableTobeUpdateId = tableTobeUpdateRequest.body[0].id;
 
     const response = await request(app)
       .patch(`${baseUrl}/13970660-5dbe-423a-9a9d-5c23b37943cf`)
@@ -149,6 +149,28 @@ describe("POST /tables", () => {
 
     expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(404);
+  });
+
+  test("PATCH /tables/:id - should not be able to update isAdm field value", async () => {
+    const newValues = { isAdm: false };
+
+    const admingLoginResponse = await request(app)
+      .post("/login")
+      .send(mockedAdmin);
+    const token = `Bearer ${admingLoginResponse.body.token}`;
+
+    const tableTobeUpdateRequest = await request(app)
+      .get("/tables")
+      .set("Authorization", token);
+    const tableTobeUpdateId = tableTobeUpdateRequest.body[0].id;
+
+    const response = await request(app)
+      .patch(`${baseUrl}/${tableTobeUpdateId}`)
+      .set("Authorization", token)
+      .send(newValues);
+
+    expect(response.body).toHaveProperty("message");
+    expect(response.status).toBe(401);
   });
 
   test("DELETE /tables/:id -  Must be able to soft delete table", async () => {
@@ -196,12 +218,12 @@ describe("POST /tables", () => {
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
-    const UserTobeDeleted = await request(app)
+    const tableTobeDeleted = await request(app)
       .get(baseUrl)
       .set("Authorization", `Bearer ${adminLoginResponse.body.token}`);
 
     const response = await request(app)
-      .delete(`/tables/${UserTobeDeleted.body[0].id}`)
+      .delete(`/tables/${tableTobeDeleted.body[0].id}`)
       .set("Authorization", `Bearer ${userLoginResponse.body.token}`);
 
     expect(response.body).toHaveProperty("message");
