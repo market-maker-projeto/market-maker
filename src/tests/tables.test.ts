@@ -88,6 +88,19 @@ describe("POST /tables", () => {
     expect(response.status).toBe(200);
   });
 
+  test("GET /tables/:id - It should be possible to list a specific table", async () => {
+    const adminLoginResponse = await request(app)
+      .post(baseUrl)
+      .send(mockedAdmin);
+
+    const response = await request(app)
+      .get(baseUrl)
+      .set("Authorization", `Bearer ${adminLoginResponse.body.token}`);
+
+    expect(response.body).toHaveLength(1);
+    expect(response.status).toBe(200);
+  });
+
   test("GET /tables - Should not be able to list table not being admin", async () => {
     const adminLoginResponse = await request(app)
       .post(baseUrl)
@@ -100,4 +113,6 @@ describe("POST /tables", () => {
     expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(403);
   });
+
+
 });
