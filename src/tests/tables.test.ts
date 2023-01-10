@@ -64,5 +64,10 @@ describe("POSt/tables", () => {
     expect(response.status).toBe(403);
   });
 
- 
+  test("POST /tables - Should not be able to create table without authentication", async () => {
+    const response = await request(app).post(baseUrl).send(createTableValid);
+
+    expect(response.body).toHaveProperty("message");
+    expect(response.status).toBe(401);
+  });
 });
