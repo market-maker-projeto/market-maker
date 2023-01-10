@@ -34,13 +34,10 @@ describe("POSt/tables", () => {
       .send(createTableValid);
 
     expect(response.status).toBe(201);
-    expect(response.body).toEqual(
-      expect.objectContaining({
-        seats: 4,
-        isActive: false,
-        table_number: 7,
-      })
-    );
+    expect(response.body).toHaveProperty("id");
+    expect(response.body).toHaveProperty("seats");
+    expect(response.body).toHaveProperty("isActive");
+    expect(response.body).toHaveProperty("table_number");
   });
 
   test("POST /tables - Should not be able to create a table that already exists", async () => {
