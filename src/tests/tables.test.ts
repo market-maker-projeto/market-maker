@@ -134,4 +134,21 @@ describe("POST /tables", () => {
     expect(findTable.body[0].isActive).toBe(false);
     expect(response.status).toBe(401);
   });
+
+  test("DELETE /tables/:id -  should not be able to delete user without authentication", async () => {
+    const adminLoginResponse = await request(app)
+      .post("/login")
+      .send(mockedAdmin);
+
+    const tableTobeDeleted = await request(app)
+      .get(baseUrl)
+      .set("Authorization", `Bearer ${adminLoginResponse.body.token}`);
+
+    const response = await request(app).delete(
+      `/tables/${tableTobeDeleted.body[0].id}`
+    );
+
+    expect(response.body).toHaveProperty("message");
+    expect(response.status).toBe(401);
+  });
 });
