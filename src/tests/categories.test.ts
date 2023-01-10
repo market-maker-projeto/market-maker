@@ -43,6 +43,14 @@ describe("POST/category", () => {
     expect(response.status).toBe(403)
     expect(response.body).toHaveProperty("message")
   })
+  test("POST /category - should not be able to create a category that already exists", async () => {
+    const response = await request(app).post(baseUrl).send(createCategory);
+    
+    expect(response.body).toHaveProperty("message")
+    expect(response.status).toBe(409)
+  })
+
+
 
   test("GET /category - should be able to list all categories", async () => {
     const response = await request(app).get('/category')
