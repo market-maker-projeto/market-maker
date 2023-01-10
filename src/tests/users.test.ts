@@ -34,4 +34,24 @@ describe("POST/users", () => {
     );
     expect(response.body).not.toHaveProperty("password");
   });
+
+  test("POST /users - should not to be able to create a user that already exists", async () => {
+    const response = await request(app).post("/users").send(createUserValid);
+
+    expect(response.body).toHaveProperty("message");
+    expect(response.status).toBe(409);
+  });
+
+  test("GET /users - Must be able to list users", async () => {
+    await request(app).post("/users").send(createUserValid);
+    const admLoginResp = await request(app)
+      .post("/login")
+      .send(createUserValid);
+    const response = await request(app)
+      .get("/users")
+      .set("Authorization", `Bearer ${admLoginResp.body.token}`);
+
+    expect(response.body).toHaveLength(2);
+    expect(response.body[0]).not.toHaveProperty("password");
+  });
 });
