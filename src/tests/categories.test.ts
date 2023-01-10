@@ -1,0 +1,53 @@
+import { mockedUserLogin } from './mocks/users.mock';
+import { createCategory, mockedCategory } from "./mocks/categories.mock";
+import { DataSource } from "typeorm";
+import AppDataSource from "../data-source";
+import request from "supertest";
+import app from "../app";
+
+describe("POST/category", () => {
+  let connection: DataSource;
+  const baseUrl = "/category";
+
+  beforeAll(async () => {
+    await AppDataSource.initialize()
+      .then((res) => {
+        connection = res;
+      })
+      .catch((err) => {
+        console.error("Error during Data Source initialization", err);
+      });
+  });
+
+  afterAll(async () => {
+    await connection.destroy();
+  });
+
+  test("POST /category - Must be able to create a category", async () => {
+    const response = await request(app).post(baseUrl).send(createCategory);
+    expect(response.status).toBe(201);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        name: "Bebidas",
+        id: "",
+      })
+    );
+  });
+
+  test("POST /category - should not be able to create a category not being admin", async () => {
+    const category = await request(app).get(baseUrl)
+    const userLoginResponse = await request(app).post("/login").send(mockedUserLogin);
+    mockedCategory.id = category.body[0].id
+    const response = await request(app).post('/category').set("Authorization", `Bearer ${userLoginResponse.body.token}`).send(createCategory)
+
+    expect(response.status).toBe(403)
+    expect(response.body).toHaveProperty("message")
+  })
+
+  test("GET /category - should be able to list all categories", async () => {
+    const response = await request(app).get('/category')
+    expect(response.body).toHaveProperty("map")
+    expect(response.status).toBe(200)
+  })
+
+});
