@@ -3,7 +3,7 @@ import AppDataSource from "../data-source";
 import request from "supertest";
 import app from "../app";
 import { createTableValid } from "./mocks/tables.mock";
-import { mockedAdmin, mockedAdminLogin } from "./mocks/users.mock";
+import { mockedAdmin, mockedAdminLogin, mockedUserLogin } from "./mocks/users.mock";
 
 describe("POST /tables", () => {
   let connection: DataSource;
@@ -172,6 +172,22 @@ describe("POST /tables", () => {
     expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(401);
   });
+
+  test("PATCH /tables/:id - should not be able to update another user without adm permission",async () => {
+
+    const userLoginResponse = await request(app).post("/login").send(mockedUserLogin);
+    const admingLoginResponse = await request(app).post("/login").send(mockedAdminLogin);
+    const userToken = `Bearer ${userLoginResponse.body.token}`
+    const adminToken = `Bearer ${admingLoginResponse.body.token}`
+    
+    const tableTobeUpdateRequest = await request(app).get(baseUrl).set("Authorization", adminToken)
+    const tableTobeUpdateId = tableTobeUpdateRequest.body[1].id
+
+    const response = await request(app).patch(`${baseUrl}/${tableTobeUpdateId}`).set("Authorization",userToken)
+
+    expect(response.body).toHaveProperty("message")
+    expect(response.status).toBe(401)
+})
 
   test("PATCH /tables/:id -  Should be able to update table",async () => {
     const newValues = {seats: 5, table_number: 5}
