@@ -1,4 +1,4 @@
-import { mockedUserLogin } from './mocks/users.mock';
+import { mockedAdminLogin, mockedUserLogin } from './mocks/users.mock';
 import { createCategory, mockedCategory } from "./mocks/categories.mock";
 import { DataSource } from "typeorm";
 import AppDataSource from "../data-source";
@@ -48,6 +48,27 @@ describe("POST/category", () => {
     const response = await request(app).get('/category')
     expect(response.body).toHaveProperty("map")
     expect(response.status).toBe(200)
+  })
+
+  test("PATCH /category - should be able to edit a category", async () => {
+    const newValues = {name: "Alimentação"}
+    const adminLoginResponse = await request(app).post("/login").send(mockedAdminLogin);
+    const token = `Bearer ${adminLoginResponse.body.token}`
+
+    const categoryToBeUpdatedRequest = await request(app).get("/category").set("Authorization", token)
+    const categoryToBeUpdatedId = categoryToBeUpdatedRequest.body[0].id
+
+    const response = await  request(app).patch(`/category/${categoryToBeUpdatedId}`).set("Authorization", token).send(newValues)
+
+    const categoryUpdated = await request(app).get("category").set("Authorization", token)
+
+    expect(categoryUpdated.status).toBe(200)
+    expect(categoryUpdated.body[0]).toEqual(
+        expect.objectContaining({
+            name: "",
+            id: "",
+        })
+    )
   })
 
 });
