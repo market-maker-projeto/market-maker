@@ -33,6 +33,12 @@ describe("POST/category", () => {
       })
     );
   });
+  test("POST /category - should not be able to create a category that already exists", async () => {
+    const response = await request(app).post(baseUrl).send(createCategory);
+    
+    expect(response.body).toHaveProperty("message")
+    expect(response.status).toBe(409)
+  })
 
   test("POST /category - should not be able to create a category not being admin", async () => {
     const category = await request(app).get(baseUrl)
@@ -42,12 +48,6 @@ describe("POST/category", () => {
 
     expect(response.status).toBe(403)
     expect(response.body).toHaveProperty("message")
-  })
-  test("POST /category - should not be able to create a category that already exists", async () => {
-    const response = await request(app).post(baseUrl).send(createCategory);
-    
-    expect(response.body).toHaveProperty("message")
-    expect(response.status).toBe(409)
   })
 
 
