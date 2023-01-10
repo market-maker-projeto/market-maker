@@ -114,7 +114,7 @@ describe("POST /tables", () => {
     expect(response.status).toBe(403);
   });
 
-  test("PATCH /tables/:id -  should not be able to update table without authentication", async () => {
+  test("PATCH /tables/:id -  Should not be able to update table without authentication", async () => {
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdmin);
@@ -129,7 +129,7 @@ describe("POST /tables", () => {
     expect(response.status).toBe(401);
   });
 
-  test("PATCH /tables/:id - should not be able to update table with invalid id", async () => {
+  test("PATCH /tables/:id - Should not be able to update table with invalid id", async () => {
     const newValues = { seats: 2, table_number: 9 };
 
     const admingLoginResponse = await request(app)
@@ -151,7 +151,7 @@ describe("POST /tables", () => {
     expect(response.status).toBe(404);
   });
 
-  test("PATCH /tables/:id - should not be able to update isAdm field value", async () => {
+  test("PATCH /tables/:id - Should not be able to update isAdm field value", async () => {
     const newValues = { isAdm: false };
 
     const admingLoginResponse = await request(app)
@@ -172,6 +172,24 @@ describe("POST /tables", () => {
     expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(401);
   });
+
+  test("PATCH /tables/:id -  Should be able to update table",async () => {
+    const newValues = {seats: 5, table_number: 5}
+
+    const admingLoginResponse = await request(app).post("/login").send(mockedAdmin);
+    const token = `Bearer ${admingLoginResponse.body.token}`
+    
+    const tableTobeUpdateRequest = await request(app).get("/tables").set("Authorization", token)
+    const tableTobeUpdateId = tableTobeUpdateRequest.body[0].id
+
+    const response = await request(app).patch(`/tables/${tableTobeUpdateId}`).set("Authorization",token).send(newValues)
+
+    const tableUpdated = await request(app).get("/tables").set("Authorization", token)
+
+    expect(response.status).toBe(200)
+    expect(tableUpdated.body[0].seats).toEqual(5)
+    expect(tableUpdated.body[0].table_number).toEqual(5)
+})    
 
   test("DELETE /tables/:id -  Must be able to soft delete table", async () => {
     const adminLoginResponse = await request(app)
