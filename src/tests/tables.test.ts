@@ -223,7 +223,7 @@ describe("POST /tables", () => {
     const token = `Bearer ${admingLoginResponse.body.token}`;
 
     const response = await request(app)
-      .patch(`/tables/13970660-5dbe-423a-9a9d-5c23b37943cf`)
+      .patch(`${baseUrl}/13970660-5dbe-423a-9a9d-5c23b37943cf`)
       .set("Authorization", token)
       .send({
         seats: 15,
@@ -249,7 +249,7 @@ describe("POST /tables", () => {
     const tableToDeletedId = tableTobeDeleted.body[0].id;
 
     const response = await request(app)
-      .delete(`/tables/${tableToDeletedId}`)
+      .delete(`${baseUrl}/${tableToDeletedId}`)
       .set("Authorization", token);
 
     expect(response.status).toBe(204);
