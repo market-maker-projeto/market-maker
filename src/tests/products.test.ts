@@ -140,4 +140,66 @@ describe("POST/products", () => {
     expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(404);
   });
+
+
+
+
+  test("DELETE /products/:id - should be able to delete a product", async () => {
+    const adminLoginResponse = await request(app)
+      .post("/login")
+      .send(mockedAdminLogin);
+    const adminToken = `Bearer ${adminLoginResponse.body.token}`;
+    const productToBeDeleted = await request(app)
+    .get("/products")
+    .set("Authorization", `Bearer ${adminToken}`)
+    const response = await request(app)
+      .delete(`/products/${productToBeDeleted.body[0].id}`)
+      .set("Authorization", `Bearer ${adminToken}`);
+    expect(response.status).toBe(204);
+  })
+  test("DELETE /products/:id - should not be able to delete not being admin", async () => {
+    const adminLoginResponse = await request(app)
+      .post("/login")
+      .send(mockedAdminLogin);
+    const adminToken = `Bearer ${adminLoginResponse.body.token}`;
+    const productToBeDeleted = await request(app)
+      .get("/products")
+      .set("Authorization", adminToken);
+    const userLoginResponse = await request(app)
+      .post("/login")
+      .send(mockedUserLogin);
+    const userToken = `Bearer ${userLoginResponse.body.token}`;
+    const response = await request(app)
+      .delete(`/products/${productToBeDeleted.body[0].id}`)
+      .set("Authorization", `Bearer ${userToken}`);
+      expect(response.body).toHaveProperty("message");
+      expect(response.status).toBe(403);
+  })
+  test("DELETE /products/:id - should not be able to delete a product that doesnt exists", async () => {
+    const adminLoginResponse = await request(app)
+      .post("/login")
+      .send(mockedAdminLogin);
+    const adminToken = `Bearer ${adminLoginResponse.body.token}`;
+
+    const response = await request(app)
+      .delete(`/products/13970660-5dbe-423a-9a9d-5c23b37943cf`)
+      .set("Authorization", `Bearer ${adminToken}`);
+
+    expect(response.body).toHaveProperty("message");
+    expect(response.status).toBe(404);
+  })
+  test("DELETE /products/:id - should not be able to delete a product with invalid id", async () => {
+    const adminLoginResponse = await request(app)
+      .post("/login")
+      .send(mockedAdminLogin);
+    const adminToken = `Bearer ${adminLoginResponse.body.token}`;
+
+    const response = await request(app)
+      .delete(`/product/b855d86b-d4c9-41cd-ab98-d7fa734c6ce4`)
+      .set("Authorization", `Bearer ${adminToken}`);
+
+    expect(response.body).toHaveProperty("message");
+    expect(response.status).toBe(404);
+  })
+
 });
