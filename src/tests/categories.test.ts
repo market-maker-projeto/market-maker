@@ -79,7 +79,7 @@ describe("POST/category", () => {
       .send(newValues);
 
     const categoryUpdated = await request(app)
-      .get("category")
+      .get("/category")
       .set("Authorization", token);
 
     expect(response.status).toBe(200);
@@ -103,7 +103,7 @@ describe("POST/category", () => {
     const userToken = `Bearer ${userLoginResponse.body.token}`;
 
     const categoryToBeUpdated = await request(app)
-      .get("category")
+      .get("/category")
       .set("Authorization", adminToken);
     const categoryToBeUpdatedId = categoryToBeUpdated.body[0].id;
 
@@ -137,7 +137,7 @@ describe("POST/category", () => {
       .send(mockedAdminLogin);
     const adminToken = `Bearer ${adminLoginResponse.body.token}`;
     const categoryToBeDeleted = await request(app)
-      .get("category")
+      .get("/category")
       .set("Authorization", adminToken);
 
     const response = await request(app)
@@ -153,7 +153,7 @@ describe("POST/category", () => {
       .send(mockedAdminLogin);
     const adminToken = `Bearer ${adminLoginResponse.body.token}`;
     const categoryToBeDeleted = await request(app)
-      .get("category")
+      .get("/category")
       .set("Authorization", adminToken);
     const userLoginResponse = await request(app)
       .post("/login")
