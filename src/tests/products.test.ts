@@ -1,4 +1,4 @@
-import { mockedAdminLogin, mockedUserLogin } from "./mocks/users.mock";
+import { createUserValid, mockedAdmin, mockedAdminLogin, mockedUserLogin } from "./mocks/users.mock";
 import {
   createProduct,
   invalidProduct,
@@ -28,6 +28,7 @@ describe("POST/products", () => {
   });
 
   test("POST /products - should be able to create a product", async () => {
+    const createAdmin = await request(app).post("/users").send(mockedAdmin);
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
@@ -55,6 +56,7 @@ describe("POST/products", () => {
     );
   });
   test("POST /products - should not be able to create a product that already exists", async () => {
+    const createAdmin = await request(app).post("/users").send(mockedAdmin);
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
@@ -73,6 +75,7 @@ describe("POST/products", () => {
   });
 
   test("POST /products - should not be able to create a product not being admin", async () => {
+    const createUser = await request(app).post("/users").send(createUserValid);
     const products = await request(app).get(baseUrl);
     const userLoginResponse = await request(app)
       .post("/login")
@@ -88,6 +91,8 @@ describe("POST/products", () => {
   });
 
   test("POST /products - should not be able to create an invalid product", async () => {
+    const createAdmin = await request(app).post("/users").send(mockedAdmin);
+    
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
@@ -142,6 +147,8 @@ describe("POST/products", () => {
   });
   test("PATCH /products/:id - should be able to edit a product", async () => {
     const newValues = { name: "Hamburguer", price: 32.99 };
+    const createAdmin = await request(app).post("/users").send(mockedAdmin);
+    
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
@@ -173,7 +180,9 @@ describe("POST/products", () => {
   });
   test("PATCH /products/:id - should not be able to edit a product without being admin", async () => {
     const newValues = { name: "Hamburguer", price: 32.99 };
-
+    const createAdmin = await request(app).post("/users").send(mockedAdmin);
+    const createUser = await request(app).post("/users").send(createUserValid);
+    
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
@@ -199,7 +208,8 @@ describe("POST/products", () => {
 
   test("PATCH /products/:id - should not be able to edit a product that doesnt exists", async () => {
     const newValues = { name: "Hamburguer", price: 32.99 };
-
+    const createAdmin = await request(app).post("/users").send(mockedAdmin);
+    
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
@@ -214,7 +224,8 @@ describe("POST/products", () => {
   })
   test("PATCH /products/:id - should not be able to edit a product with invalid id", async () => {
     const newValues = { name: "Hamburguer", price: 32.99 };
-
+    const createAdmin = await request(app).post("/users").send(mockedAdmin);
+    
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
@@ -231,6 +242,8 @@ describe("POST/products", () => {
 
 
   test("DELETE /products/:id - should be able to delete a product", async () => {
+    const createAdmin = await request(app).post("/users").send(mockedAdmin);
+    
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
@@ -244,6 +257,9 @@ describe("POST/products", () => {
     expect(response.status).toBe(204);
   });
   test("DELETE /products/:id - should not be able to delete not being admin", async () => {
+    const createAdmin = await request(app).post("/users").send(mockedAdmin);
+    const createUser = await request(app).post("/users").send(createUserValid);
+    
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
@@ -262,6 +278,8 @@ describe("POST/products", () => {
     expect(response.status).toBe(403);
   });
   test("DELETE /products/:id - should not be able to delete a product that doesnt exists", async () => {
+    const createAdmin = await request(app).post("/users").send(mockedAdmin);
+    
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
@@ -275,6 +293,8 @@ describe("POST/products", () => {
     expect(response.status).toBe(404);
   });
   test("DELETE /products/:id - should not be able to delete a product with invalid id", async () => {
+    const createAdmin = await request(app).post("/users").send(mockedAdmin);
+    
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
