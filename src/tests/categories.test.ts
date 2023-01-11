@@ -123,7 +123,7 @@ describe("POST/category", () => {
       .send(mockedAdminLogin);
     const adminToken = `Bearer ${adminLoginResponse.body.token}`;
     const response = await request(app)
-      .patch(`/category/users/13970660-5dbe-423a-9a9d-5c23b37943cf`)
+      .patch(`/category/13970660-5dbe-423a-9a9d-5c23b37943cf`)
       .set("Authorization", adminToken)
       .send(newValues);
 
@@ -141,7 +141,7 @@ describe("POST/category", () => {
       .set("Authorization", adminToken);
 
     const response = await request(app)
-      .delete(`/users/${categoryToBeDeleted.body[0].id}`)
+      .delete(`/category/${categoryToBeDeleted.body[0].id}`)
       .set("Authorization", `Bearer ${adminToken}`);
 
     expect(response.status).toBe(204);
@@ -161,7 +161,7 @@ describe("POST/category", () => {
     const userToken = `Bearer ${userLoginResponse.body.token}`;
 
     const response = await request(app)
-      .delete(`/users/${categoryToBeDeleted.body[0].id}`)
+      .delete(`/category/${categoryToBeDeleted.body[0].id}`)
       .set("Authorization", `Bearer ${userToken}`);
 
     expect(response.body).toHaveProperty("message");
@@ -174,7 +174,7 @@ describe("POST/category", () => {
     const adminToken = `Bearer ${adminLoginResponse.body.token}`;
 
     const response = await request(app)
-      .delete(`/users/13970660-5dbe-423a-9a9d-5c23b37943cf`)
+      .delete(`/category/13970660-5dbe-423a-9a9d-5c23b37943cf`)
       .set("Authorization", `Bearer ${adminToken}`);
 
     expect(response.body).toHaveProperty("message");
