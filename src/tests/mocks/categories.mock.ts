@@ -1,12 +1,13 @@
-import { ICategory, IMockedCategory } from './../../interfaces/categories.interface';
+import {
+  ICategory,
+  IMockedCategory,
+} from "./../../interfaces/categories.interface";
 
+export const mockedCategory: ICategory = {
+  name: "Bebidas",
+};
 
-
-export const createCategory: ICategory = {
-    name: "Bebidas"
-}
-
-export const mockedCategory: IMockedCategory = {
-    name: "Bebidas",
-    id: ""
-}
+export const mockedCategoryResponse: IMockedCategory = {
+  name: "Bebidas",
+  id: "",
+};
