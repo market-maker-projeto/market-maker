@@ -1,14 +1,20 @@
-import {  IMockedCategory } from './categories.interface';
-export interface IValidProduct{
-    categoryId: string;
-    name: string;
-    price: number;
-    in_stock: boolean;
+import { IMockedCategory } from "./categories.interface";
+export interface IProduct {
+  categoryId: string;
+  name: string;
+  price: number;
+  in_stock: boolean;
 }
-export interface IMockedProduct{
-    categoryId: string;
-    name: string;
-    price: number;
-    in_stock: boolean;
-    id: string;
+export interface IProductResponse {
+  categoryId: string;
+  name: string;
+  price: number;
+  in_stock: boolean;
+  id: string;
+}
+
+export interface IProductInvalid {
+  categoryId: string;
+  name: string;
+  in_stock: boolean;
 }
