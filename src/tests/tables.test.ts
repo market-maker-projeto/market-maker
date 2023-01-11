@@ -5,6 +5,7 @@ import app from "../app";
 import { createTableValid } from "./mocks/tables.mock";
 import {
   mockedAdmin,
+  createUserValid,
   mockedAdminLogin,
   mockedUserLogin,
 } from "./mocks/users.mock";
@@ -28,8 +29,10 @@ describe("POST /tables", () => {
   });
 
   test("POST /tables - Must be able to register a table", async () => {
+    await request(app).post("/users").send(mockedAdmin);
+
     const adminLoginResponse = await request(app)
-      .post(baseUrl)
+      .post("/login")
       .send(mockedAdminLogin);
 
     const response = await request(app)
@@ -45,6 +48,8 @@ describe("POST /tables", () => {
   });
 
   test("POST /tables - Should not be able to create a table that already exists", async () => {
+    await request(app).post("/users").send(mockedAdmin);
+
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
@@ -59,27 +64,50 @@ describe("POST /tables", () => {
   });
 
   test("POST /tables - Should not be able to create table not being admin", async () => {
-    const response = await request(app).post(baseUrl).send(createTableValid);
+    await request(app).post("/users").send(createUserValid);
+
+    const userLoginResponse = await request(app)
+      .post("/login")
+      .send(mockedUserLogin);
+
+    const response = await request(app)
+      .post(baseUrl)
+      .set("Authorization", `Bearer ${userLoginResponse.body.token}`)
+      .send(createTableValid);
 
     expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(403);
   });
 
   test("POST /tables - Should not be able to create table without authentication", async () => {
-    const response = await request(app).post(baseUrl).send(createTableValid);
+    const response = await request(app).get(baseUrl).send(createTableValid);
 
     expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(401);
   });
 
   test("POST /tables - It must not be possible to register an invalid table", async () => {
-    const response = await request(app).post(baseUrl).send(createTableValid);
+    await request(app).post("/users").send(mockedAdmin);
 
-    expect(response.body).toHaveProperty("message");
-    expect(response.status).toBe(401);
+    const adminLoginResponse = await request(app)
+      .post("/login")
+      .send(mockedAdminLogin);
+
+    const response = await request(app)
+      .post(baseUrl)
+      .set("Authorization", `Bearer ${adminLoginResponse.body.token}`)
+      .send(createTableValid);
+
+    expect(response.status).toBe(201);
+    expect(response.body).toHaveProperty("id");
+    expect(response.body).toHaveProperty("seats");
+    expect(response.body).toHaveProperty("isActive");
+    expect(response.body).toHaveProperty("table_number");
   });
 
   test("GET /tables - Must be able to list all tables", async () => {
+    await request(app).post("/users").send(mockedAdmin);
+
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
@@ -93,6 +121,8 @@ describe("POST /tables", () => {
   });
 
   test("GET /tables/:id - It should be possible to list a specific table", async () => {
+    await request(app).post("/users").send(mockedAdmin);
+
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
@@ -106,19 +136,24 @@ describe("POST /tables", () => {
   });
 
   test("GET /tables - Should not be able to list table not being admin", async () => {
-    const adminLoginResponse = await request(app)
+    await request(app).post("/users").send(createUserValid);
+
+    const userLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
 
     const response = await request(app)
       .get(baseUrl)
-      .set("Authorization", `Bearer ${adminLoginResponse.body.token}`);
+      .set("Authorization", `Bearer ${userLoginResponse.body.token}`);
 
     expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(403);
   });
 
   test("PATCH /tables/:id - should not be able to update tables without adm permission", async () => {
+    await request(app).post("/users").send(mockedAdmin);
+    await request(app).post("/users").send(createUserValid);
+
     const newValues = { seats: 10 };
 
     const userLoginResponse = await request(app)
@@ -145,6 +180,8 @@ describe("POST /tables", () => {
   });
 
   test("PATCH /tables/:id -  should be able to update table", async () => {
+    await request(app).post("/users").send(mockedAdmin);
+
     const newValues = { seats: 10, isActive: true };
 
     const admingLoginResponse = await request(app)
@@ -172,6 +209,8 @@ describe("POST /tables", () => {
   });
 
   test("PATCH /tables/:id - should not be able to update table with invalid id", async () => {
+    await request(app).post("/users").send(mockedAdmin);
+
     const newValues = { seats: 10 };
 
     const admingLoginResponse = await request(app)
@@ -189,6 +228,8 @@ describe("POST /tables", () => {
   });
 
   test("PATCH /tables/:id - should not be able to update another table without adm permission", async () => {
+    await request(app).post("/users").send(createUserValid);
+
     const userLoginResponse = await request(app)
       .post("/login")
       .send(mockedUserLogin);
@@ -226,6 +267,8 @@ describe("POST /tables", () => {
   });
 
   test("DELETE /tables/:id -  should not be able to delete table without authentication", async () => {
+    await request(app).post("/users").send(mockedAdmin);
+
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
@@ -243,6 +286,9 @@ describe("POST /tables", () => {
   });
 
   test("DELETE /tables/:id -  should not be able to delete table not being admin", async () => {
+    await request(app).post("/users").send(mockedAdmin);
+    await request(app).post("/users").send(createUserValid);
+
     const userLoginResponse = await request(app)
       .post("/login")
       .send(mockedUserLogin);
