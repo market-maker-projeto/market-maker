@@ -42,7 +42,7 @@ describe("POST/users", () => {
       expect.objectContaining({
         id: "uuid",
         isAdmin: false,
-        username: "testename",
+        username: "user",
       })
     );
     expect(response.body).not.toHaveProperty("password");
@@ -77,7 +77,7 @@ describe("POST/users", () => {
       expect.objectContaining({
         id: "uuid",
         isAdmin: false,
-        username: "testename",
+        username: "user",
       })
     );
   });
