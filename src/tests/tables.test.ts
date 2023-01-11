@@ -219,7 +219,7 @@ describe("POST /tables", () => {
     const token = `Bearer ${admingLoginResponse.body.token}`;
 
     const response = await request(app)
-      .patch(`/users/13970660-5dbe-423a-9a9d-5c23b37943cf`)
+      .patch(`/tables/13970660-5dbe-423a-9a9d-5c23b37943cf`)
       .set("Authorization", token)
       .send(newValues);
 
