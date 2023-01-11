@@ -1,6 +1,6 @@
 import { IUser, IUserLogin } from "../../interfaces/users.interfaces";
 
-export const createUserValid: IUser = {
+export const mockedUser: IUser = {
   isAdmin: false,
   username: "user",
   password: "123456",
