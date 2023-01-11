@@ -1,4 +1,4 @@
-import { mockedAdminLogin, mockedUserLogin } from "./mocks/users.mock";
+import { createUserValid, mockedAdmin, mockedAdminLogin, mockedUserLogin } from "./mocks/users.mock";
 import { createCategory, mockedCategory } from "./mocks/categories.mock";
 import { DataSource } from "typeorm";
 import AppDataSource from "../data-source";
@@ -24,7 +24,14 @@ describe("POST/category", () => {
   });
 
   test("POST /category - Must be able to create a category", async () => {
-    const response = await request(app).post(baseUrl).send(createCategory);
+    const createAdmin = await request(app).post("/users").send(mockedAdmin);
+
+    const adminLoginResponse = await request(app)
+      .post("/login")
+      .send(mockedAdminLogin);
+    const token = `Bearer ${adminLoginResponse.body.token}`;
+
+    const response = await request(app).post(baseUrl).send(createCategory).set("Authorization", token);
     expect(response.status).toBe(201);
     expect(response.body).toEqual(
       expect.objectContaining({
@@ -34,13 +41,22 @@ describe("POST/category", () => {
     );
   });
   test("POST /category - should not be able to create a category that already exists", async () => {
-    const response = await request(app).post(baseUrl).send(createCategory);
+    const createAdmin = await request(app).post("/users").send(mockedAdmin);
+
+    const adminLoginResponse = await request(app)
+      .post("/login")
+      .send(mockedAdminLogin);
+    const token = `Bearer ${adminLoginResponse.body.token}`;
+    const response = await request(app).post(baseUrl).send(createCategory).set("Authorization", token);
 
     expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(409);
   });
 
   test("POST /category - should not be able to create a category not being admin", async () => {
+    const createUser = await request(app).post("/users").send(createUserValid);
+
+
     const category = await request(app).get(baseUrl);
     const userLoginResponse = await request(app)
       .post("/login")
@@ -56,13 +72,21 @@ describe("POST/category", () => {
   });
 
   test("GET /category - should be able to list all categories", async () => {
-    const response = await request(app).get("/category");
+    const createAdmin = await request(app).post("/users").send(mockedAdmin);
+
+    const adminLoginResponse = await request(app)
+      .post("/login")
+      .send(mockedAdminLogin);
+    const token = `Bearer ${adminLoginResponse.body.token}`;
+    const response = await request(app).get("/category").set("Authorization", token);
     expect(response.body).toHaveProperty("map");
     expect(response.status).toBe(200);
   });
 
   test("PATCH /category/:id- should be able to edit a category", async () => {
     const newValues = { name: "Alimentação" };
+    const createAdmin = await request(app).post("/users").send(mockedAdmin);
+
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
@@ -93,6 +117,8 @@ describe("POST/category", () => {
   test("PATCH /category/:id - should not be able to edit a category not being admin", async () => {
     const newValues = { name: "Alimentação" };
 
+    const createAdmin = await request(app).post("/users").send(mockedAdmin);
+
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
@@ -117,6 +143,8 @@ describe("POST/category", () => {
   });
   test("PATCH /category/:id - should not be able to edit a category that doesnt exists", async () => {
     const newValues = { name: "Alimentação" };
+    const createAdmin = await request(app).post("/users").send(mockedAdmin);
+
 
     const adminLoginResponse = await request(app)
       .post("/login")
@@ -132,6 +160,7 @@ describe("POST/category", () => {
   });
 
   test("DELETE /category/:id - should be able to delete a category", async () => {
+    const createAdmin = await request(app).post("/users").send(mockedAdmin);
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
@@ -148,6 +177,7 @@ describe("POST/category", () => {
   });
 
   test("DELETE /category/:id - should not be able to delete a category not being admin", async () => {
+    const createAdmin = await request(app).post("/users").send(mockedAdmin);
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
@@ -168,6 +198,7 @@ describe("POST/category", () => {
     expect(response.status).toBe(403);
   });
   test("DELETE /category/:id - should not be able to delete a category that doesnt exists", async () => {
+    const createAdmin = await request(app).post("/users").send(mockedAdmin);
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
