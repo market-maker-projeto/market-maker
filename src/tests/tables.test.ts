@@ -179,11 +179,6 @@ describe("POST /tables", () => {
       .send(mockedAdminLogin);
     const token = `Bearer ${admingLoginResponse.body.token}`;
 
-    const tableTobeUpdateRequest = await request(app)
-      .get("/users")
-      .set("Authorization", token);
-    const tableTobeUpdateId = tableTobeUpdateRequest.body[0].id;
-
     const response = await request(app)
       .patch(`/users/13970660-5dbe-423a-9a9d-5c23b37943cf`)
       .set("Authorization", token)
