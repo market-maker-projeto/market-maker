@@ -3,6 +3,9 @@ import { retrieveEspecificUserService } from './../services/users/retrieveEspeci
 import { retrieveUsersService } from './../services/users/retrieveUsers.service';
 import { Request, Response } from "express";
 import { createUserService } from "../services/users/createUser.service";
+import { updateUserService } from '../services/users/updateUser.service';
+import { IUserUpdate } from '../interfaces/users.interfaces';
+import { deleteUserService } from '../services/users/deleteUser.service';
 
 export const createUserController = async (req: Request, res: Response) => {
   const userData = req.body
@@ -26,11 +29,13 @@ export const retrieveEspecificUserController = async (
 
 export const updateUserController = async (req: Request, res: Response) => {
   const userId = req.params.id
-  const userData = req.body
-  // const updatedUser = updateUserService(userData, userId)
-  // return res.status(200).json(updatedUser);
+  const userData:IUserUpdate = req.body
+  const updatedUser = await updateUserService(userData, userId)
+  return res.status(200).json(updatedUser);
 };
 
 export const deleteUserController = async (req: Request, res: Response) => {
-  return res.status(204).json();
+  const userId = req.params.id
+  const softDeleted = await deleteUserService(userId)
+  return res.status(204).json(softDeleted);
 };

@@ -13,6 +13,7 @@ export const verifyTokenMiddleware = async (req: Request, res: Response, next: N
         if(error){
             throw new AppError( `${error}` ,401)  
         }
+
     req.user = {
         id: decoded.sub,
         username: decoded.username,

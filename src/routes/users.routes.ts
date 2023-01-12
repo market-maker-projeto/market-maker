@@ -16,5 +16,5 @@ export const userRoutes = Router();
 userRoutes.post("",verifyDataMiddleware(userSerializer),createUserController);
 userRoutes.get("", retrieveUsersController);
 userRoutes.get("/:id",verifyTokenMiddleware,verifyAdminMiddleware, retrieveEspecificUserController);
-userRoutes.patch("/:id", updateUserController);
-userRoutes.delete("/:id", deleteUserController);
+userRoutes.patch("/:id",verifyTokenMiddleware,verifyAdminMiddleware, updateUserController);
+userRoutes.delete("/:id",verifyTokenMiddleware,verifyAdminMiddleware, deleteUserController);

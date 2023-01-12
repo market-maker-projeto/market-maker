@@ -12,6 +12,5 @@ if (!allUsers) {
 }
 const validatedUser = await userWithoutPasswordSerializer.validate(allUsers, { stripUnknown: true})
 
-console.log(validatedUser)
 return validatedUser
 };
