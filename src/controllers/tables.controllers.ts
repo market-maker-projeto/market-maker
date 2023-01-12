@@ -1,11 +1,18 @@
+import { retrieveTablesService } from "./../services/tables/retrieveTables.service";
+import { ITable } from "./../interfaces/tables.interface";
+import { createTableService } from "./../services/tables/createTable.service";
 import { Request, Response } from "express";
 
 export const createTableController = async (req: Request, res: Response) => {
-  return res.status(201).json();
+  const tableData: ITable = req.body;
+
+  const newTable = createTableService(tableData);
+  return res.status(201).json(newTable);
 };
 
 export const retrieveTablesController = async (req: Request, res: Response) => {
-  return res.status(200).json();
+  const tables = retrieveTablesService();
+  return res.status(200).json(tables);
 };
 
 export const retrieveEspecificTableController = async (

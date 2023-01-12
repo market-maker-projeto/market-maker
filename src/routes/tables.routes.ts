@@ -1,3 +1,4 @@
+import { verifyAdminMiddleware } from "./../middlewares/verifyIsAdmin.middleware";
 import {
   createTableController,
   retrieveTablesController,
@@ -10,7 +11,7 @@ import { Router } from "express";
 
 export const tablesRoutes = Router();
 
-tablesRoutes.post("", createTableController);
+tablesRoutes.post("", verifyAdminMiddleware, createTableController);
 tablesRoutes.get("", retrieveTablesController);
 tablesRoutes.get("/:id", retrieveEspecificTableController);
 tablesRoutes.get("/:id/orders", retrieveOrdersFromTableController);
