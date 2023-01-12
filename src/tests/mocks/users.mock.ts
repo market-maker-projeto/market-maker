@@ -8,7 +8,9 @@ export const mockedUser: IUser = {
 export const mockedUserReturn: IUserReturn = {
   isAdm: false,
   username: "user",
-  id: ""
+  id: "",
+  createdAt: new Date,
+  updatedAt: new Date,
 }
 export const mockedAdmin: IUser = {
   isAdm: true,

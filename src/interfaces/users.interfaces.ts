@@ -12,4 +12,11 @@ export interface IUserReturn {
   username: string;
   isAdm: boolean;
   id: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+export interface IUserUpdate{
+  isAdm?: boolean;
+  username?:string;
+  password?: string;
 }

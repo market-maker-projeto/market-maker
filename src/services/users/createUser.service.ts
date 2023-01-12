@@ -6,7 +6,7 @@ import { userWithoutPasswordSerializer } from '../../schemas/users.schemas';
 export const createUserService = async (userData: IUser): Promise<IUserReturn> => {
 
     const userRepository = AppDataSource.getRepository(User)
-    const verifyUser = await userRepository.findBy({username: userData.username})
+    const verifyUser = await userRepository.findOneBy({username: userData.username})
     if(verifyUser) {
         throw new AppError ("User already exists", 409)
     }

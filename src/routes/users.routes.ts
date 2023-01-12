@@ -13,8 +13,8 @@ import { userSerializer } from "../schemas/users.schemas";
 
 export const userRoutes = Router();
 
-userRoutes.post("",verifyDataMiddleware(userSerializer),verifyTokenMiddleware,verifyAdminMiddleware,createUserController);
+userRoutes.post("",verifyDataMiddleware(userSerializer),createUserController);
 userRoutes.get("", retrieveUsersController);
-userRoutes.get("/:id", retrieveEspecificUserController);
+userRoutes.get("/:id",verifyTokenMiddleware,verifyAdminMiddleware, retrieveEspecificUserController);
 userRoutes.patch("/:id", updateUserController);
 userRoutes.delete("/:id", deleteUserController);

@@ -12,18 +12,20 @@ export const createSessionService = async (userData: IUserLogin) => {
     username: userData.username,
   });
 
+
   if (!user) {
-    throw new AppError("Wrong email/password.", 403);
+    throw new AppError("Wrong username/password.", 403);
   }
 
   const matchPassword = await compare(userData.password, user.password);
 
   if (!matchPassword) {
-    throw new AppError("Wrong email/password.", 403);
+    throw new AppError("Wrong username/password.", 403);
   }
 
   const token = jwt.sign(
-    { username: userData.username },
+    { username: userData.username,
+      isAdm:user.isAdm},
     process.env.SECRET_KEY,
     {
       expiresIn: "24h",
