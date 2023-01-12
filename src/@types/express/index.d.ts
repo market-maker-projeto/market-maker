@@ -4,7 +4,7 @@ declare global {
             user:{
                     id: string;
                     username: string;
-                    isAdmin: boolean;
+                    isAdm: boolean;
                 }
             
         }

@@ -1,3 +1,5 @@
+import { verifyAdminMiddleware } from './../middlewares/verifyIsAdmin.middleware';
+import { verifyTokenMiddleware } from './../middlewares/verifyToken.middleware';
 import {
   createUserController,
   retrieveUsersController,
@@ -6,10 +8,12 @@ import {
   deleteUserController,
 } from "./../controllers/users.controllers";
 import { Router } from "express";
+import { verifyDataMiddleware } from "../middlewares/verifyData.middleware";
+import { userSerializer } from "../schemas/users.schemas";
 
 export const userRoutes = Router();
 
-userRoutes.post("", createUserController);
+userRoutes.post("",verifyDataMiddleware(userSerializer),verifyTokenMiddleware,verifyAdminMiddleware,createUserController);
 userRoutes.get("", retrieveUsersController);
 userRoutes.get("/:id", retrieveEspecificUserController);
 userRoutes.patch("/:id", updateUserController);

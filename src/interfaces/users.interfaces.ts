@@ -1,5 +1,5 @@
 export interface IUser {
-  isAdmin: boolean;
+  isAdm: boolean;
   username: string;
   password: string;
 }
@@ -7,4 +7,9 @@ export interface IUser {
 export interface IUserLogin {
   username: string;
   password: string;
+}
+export interface IUserReturn {
+  username: string;
+  isAdm: boolean;
+  id: string;
 }

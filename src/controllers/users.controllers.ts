@@ -1,7 +1,11 @@
 import { Request, Response } from "express";
+import { createUserService } from "../services/users/createUser.service";
 
 export const createUserController = async (req: Request, res: Response) => {
-  return res.status(201).json();
+  const userData = req.body
+  const user = await createUserService(userData)
+  console.log(user)
+  return res.status(201).json(user);
 };
 
 export const retrieveUsersController = async (req: Request, res: Response) => {
