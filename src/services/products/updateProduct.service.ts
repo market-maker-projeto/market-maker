@@ -11,7 +11,7 @@ export const updateProductService = async (
   const product = await productRepo.findOneBy({ id: prod_id });
 
   if (!product) {
-    throw new AppError("product that doesnt exists", 400);
+    throw new AppError("Product doesnt exists", 400);
   }
 
   const updateProduct = productRepo.create({

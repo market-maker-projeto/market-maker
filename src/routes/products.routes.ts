@@ -14,4 +14,4 @@ productsRoutes.post("", verifyAdminMiddleware, createProductController);
 productsRoutes.get("", retrieveProductsController);
 productsRoutes.get("/:id", retrieveEspecificProductController);
 productsRoutes.patch("/:id", verifyAdminMiddleware, updateProductController);
-productsRoutes.delete("/:id", deleteProductController);
+productsRoutes.delete("/:id", verifyAdminMiddleware, deleteProductController);

@@ -4,6 +4,7 @@ import {
   IProductRequest,
 } from "../../src/interfaces/products.interface";
 import { createProductService } from "../services/products/createProduct.service";
+import { deleteProductService } from "../services/products/deleteProduct.service";
 import { retrieveEspecificProductService } from "../services/products/retrieveEspecificProduct.service";
 import { retrieveProductsService } from "../services/products/retrieveProducts.service";
 import { updateProductService } from "../services/products/updateProduct.service";
@@ -37,5 +38,6 @@ export const updateProductController = async (req: Request, res: Response) => {
 };
 
 export const deleteProductController = async (req: Request, res: Response) => {
-  return res.status(204).json();
+  const id = await deleteProductService(req.params.id);
+  return res.status(204).json({});
 };
