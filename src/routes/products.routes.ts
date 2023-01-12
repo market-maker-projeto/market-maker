@@ -13,5 +13,5 @@ export const productsRoutes = Router();
 productsRoutes.post("", verifyAdminMiddleware, createProductController);
 productsRoutes.get("", retrieveProductsController);
 productsRoutes.get("/:id", retrieveEspecificProductController);
-productsRoutes.patch("/:id", updateProductController);
+productsRoutes.patch("/:id", verifyAdminMiddleware, updateProductController);
 productsRoutes.delete("/:id", deleteProductController);
