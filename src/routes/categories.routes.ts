@@ -8,11 +8,14 @@ import {
 import { Router } from "express";
 import { verifyAdminMiddleware } from "../middlewares/verifyIsAdmin.middleware";
 import { verifyTokenMiddleware } from "../middlewares/verifyToken.middleware";
+import { categorySchema } from "../schemas/categories.schemas";
+import { verifyDataMiddleware } from "../middlewares/verifyData.middleware";
 
 export const categoriesRoutes = Router();
 
 categoriesRoutes.post(
   "",
+  verifyDataMiddleware(categorySchema),
   verifyTokenMiddleware,
   verifyAdminMiddleware,
   createCategoryController
