@@ -1,14 +1,23 @@
 import { Request, Response } from "express";
+import {
+  IProduct,
+  IProductRequest,
+} from "../../src/interfaces/products.interface";
+import { createProductService } from "../services/products/createProduct.service";
+import { retrieveProductsService } from "../services/products/retrieveProducts.service";
 
 export const createProductController = async (req: Request, res: Response) => {
-  return res.status(201).json();
+  const productData: IProductRequest = req.body;
+  const newProduct = await createProductService(productData);
+  return res.status(201).json(newProduct);
 };
 
 export const retrieveProductsController = async (
   req: Request,
   res: Response
 ) => {
-  return res.status(200).json();
+  const products = await retrieveProductsService();
+  return res.status(200).json(products);
 };
 
 export const retrieveEspecificProductController = async (
