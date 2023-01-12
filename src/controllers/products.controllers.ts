@@ -4,6 +4,7 @@ import {
   IProductRequest,
 } from "../../src/interfaces/products.interface";
 import { createProductService } from "../services/products/createProduct.service";
+import { retrieveEspecificProductService } from "../services/products/retrieveEspecificProduct.service";
 import { retrieveProductsService } from "../services/products/retrieveProducts.service";
 
 export const createProductController = async (req: Request, res: Response) => {
@@ -24,7 +25,8 @@ export const retrieveEspecificProductController = async (
   req: Request,
   res: Response
 ) => {
-  return res.status(200).json();
+  const product = await retrieveEspecificProductService(req.params.id);
+  return res.status(200).json(product);
 };
 
 export const updateProductController = async (req: Request, res: Response) => {
