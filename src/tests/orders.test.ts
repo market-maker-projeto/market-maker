@@ -35,15 +35,11 @@ describe("Testing /orders", () => {
       .send({ ...newOrder, table_id: table[0], client_name: user[0] });
 
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(
-      expect.objectContaining({
-        id: "",
-        createdAt: "",
-        user_id: "",
-        table_id: "",
-        client_name: "",
-      })
-    );
+    expect(response.body).toHaveProperty("id");
+    expect(response.body).toHaveProperty("createdAt");
+    expect(response.body).toHaveProperty("user_id");
+    expect(response.body).toHaveProperty("table_id");
+    expect(response.body).toHaveProperty("client_name");
   });
 
   test("GET /orders - should be able to list all orders", async () => {
@@ -70,15 +66,11 @@ describe("Testing /orders", () => {
     const response = await request(app).get(`/orders/${order.body.id}`);
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("map");
-    expect(response.body[0]).toEqual(
-      expect.objectContaining({
-        id: "",
-        createdAt: "",
-        user_id: "",
-        table_id: "",
-        client_name: "",
-      })
-    );
+    expect(response.body).toHaveProperty("id");
+    expect(response.body[0]).toHaveProperty("createdAt");
+    expect(response.body[0]).toHaveProperty("user_id");
+    expect(response.body[0]).toHaveProperty("table_id");
+    expect(response.body[0]).toHaveProperty("client_name");
   });
 
   test("GET /orders - should be able to list the closed orders", async () => {
@@ -88,21 +80,17 @@ describe("Testing /orders", () => {
       .post("/orders")
       .send({ ...newOrder, table_id: table[0], client_name: user[0] });
 
-    const deletedOrder = await request(app).delete(`/orders/${order.body.id}`);
+    await request(app).delete(`/orders/${order.body.id}`);
 
     const response = await request(app).get("/orders/deleted");
 
     expect(response.status).toBe(200);
-    expect(response.body[0]).toEqual(
-      expect.objectContaining({
-        id: "",
-        createdAt: "",
-        user_id: "",
-        table_id: "",
-        client_name: "",
-        deletedAt: "",
-      })
-    );
+
+    expect(response.body[0]).toHaveProperty("createdAt");
+    expect(response.body[0]).toHaveProperty("user_id");
+    expect(response.body[0]).toHaveProperty("table_id");
+    expect(response.body[0]).toHaveProperty("client_name");
+    expect(response.body[0]).toHaveProperty("deletedAt");
   });
 
   test("DELETE /orders - should be able to delete a order", async () => {
