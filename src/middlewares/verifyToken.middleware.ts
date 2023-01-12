@@ -16,7 +16,7 @@ export const verifyTokenMiddleware = async (req: Request, res: Response, next: N
     req.user = {
         id: decoded.sub,
         username: decoded.username,
-        isAdmin: decoded.isAdmin
+        isAdm: decoded.isAdm
     }
     
         return next()

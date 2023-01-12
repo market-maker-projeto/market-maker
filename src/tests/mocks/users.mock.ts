@@ -1,13 +1,17 @@
-import { IUser, IUserLogin } from "../../interfaces/users.interfaces";
+import { IUser, IUserLogin, IUserReturn } from "../../interfaces/users.interfaces";
 
 export const mockedUser: IUser = {
-  isAdmin: false,
+  isAdm: false,
   username: "user",
   password: "123456",
 };
-
+export const mockedUserReturn: IUserReturn = {
+  isAdm: false,
+  username: "user",
+  id: ""
+}
 export const mockedAdmin: IUser = {
-  isAdmin: true,
+  isAdm: true,
   username: "admin",
   password: "123456",
 };
