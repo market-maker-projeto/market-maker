@@ -35,7 +35,6 @@ describe("POST/users", () => {
         ...mockedUser,
       })
     );
-
     expect(response.body).not.toHaveProperty("password");
   });
 

@@ -35,6 +35,7 @@ describe("/login", () => {
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("token");
+    expect(response.body.isAdmin).not.toEqual(true);
   });
 
   test("POST /login -  Should be able to login with the user admin", async () => {
@@ -42,6 +43,7 @@ describe("/login", () => {
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("token");
+    expect(response.body.isAdmin).toEqual(true);
   });
 
   test("POST /login -  Should not be able to login with the user with incorrect password or username", async () => {

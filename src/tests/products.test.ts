@@ -123,6 +123,7 @@ describe("POST/products", () => {
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("map");
+    expect(response.body).toHaveProperty("category");
   });
 
   test("GET /products/:id - Should be able to list a specific product", async () => {
