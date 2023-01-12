@@ -111,7 +111,7 @@ describe("POST/users", () => {
     expect(response.body[0]).not.toHaveProperty("password");
   });
 
-  test("GET /users - Should be possible to list a especific user", async () => {
+  test("GET /users:id - Should be possible to list a especific user", async () => {
     const userLoginAdmin = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
