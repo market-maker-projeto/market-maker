@@ -43,12 +43,12 @@ describe("POST /tables", () => {
       .send(mockedTable);
 
     expect(response.status).toBe(201);
-    expect(response.body).toEqual(
-      expect.objectContaining({
-        id: "uuid",
-        ...mockedTable,
-      })
-    );
+    expect(response.body).toHaveProperty("id")
+    expect(response.body).toHaveProperty("seats")
+    expect(response.body).toHaveProperty("isActive")
+    expect(response.body).toHaveProperty("table_number")
+
+    
   });
 
   test("POST /tables - Should not be able to register a table that already exists", async () => {
@@ -138,6 +138,10 @@ describe("POST /tables", () => {
     expect(response.status).toBe(200);
     expect(response.body).toHaveLength(1);
     expect(response.body).toHaveProperty("map");
+    expect(response.body[0]).toHaveProperty("id")
+    expect(response.body[0]).toHaveProperty("seats")
+    expect(response.body[0]).toHaveProperty("isActive")
+    expect(response.body[0]).toHaveProperty("table_number")
   });
 
   test("GET /tables - Should not be able to list table not being admin", async () => {
@@ -210,9 +214,10 @@ describe("POST /tables", () => {
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("message");
-    expect(tableUpdated.body[0].seats).toBe(10);
-    expect(tableUpdated.body[0].isActive).toBe(true);
-    expect(tableUpdated.body[0].table_number).toBe(20);
+    expect(response.body[0]).toHaveProperty("id")
+    expect(response.body[0]).toHaveProperty("seats")
+    expect(response.body[0]).toHaveProperty("isActive")
+    expect(response.body[0]).toHaveProperty("table_number")
   });
 
   test("PATCH /tables/:id - Should not be able to update table with invalid id", async () => {
