@@ -1,3 +1,4 @@
+import { retrieveEspecificTableService } from "./../services/tables/retrieveEspecificTable.service";
 import { retrieveTablesService } from "./../services/tables/retrieveTables.service";
 import { ITable } from "./../interfaces/tables.interface";
 import { createTableService } from "./../services/tables/createTable.service";
@@ -19,7 +20,8 @@ export const retrieveEspecificTableController = async (
   req: Request,
   res: Response
 ) => {
-  return res.status(200).json();
+  const table = retrieveEspecificTableService(req.params);
+  return res.status(200).json(table);
 };
 
 export const retrieveOrdersFromTableController = async (

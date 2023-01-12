@@ -6,7 +6,7 @@ import AppDataSource from "../../data-source";
 export const createTableService = async (data: ITable) => {
   const tableRepository = AppDataSource.getRepository(Table);
 
-  const tableAlreadyExist = tableRepository.findOneBy({
+  const tableAlreadyExist = await tableRepository.findOneBy({
     table_number: data.table_number,
   });
 
