@@ -80,7 +80,7 @@ describe("POST/users", () => {
       .set("Authorization", token)
       .send(mockedUser);
 
-    expect(response.status).toBe(201);
+    expect(response.status).toBe(403);
     expect(response.body).toHaveProperty("message");
     
   });

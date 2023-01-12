@@ -14,3 +14,4 @@ export const userWithoutPasswordSerializer:yup.SchemaOf<IUserReturn> = yup.objec
     isAdm: yup.boolean().notRequired(),
     id: yup.string().notRequired()
 })
+export const allUsersWithoutPassword = yup.array(userWithoutPasswordSerializer)
