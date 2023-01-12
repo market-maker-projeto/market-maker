@@ -2,7 +2,9 @@ import { AppError } from "./../../errors/AppError";
 import { Table } from "./../../entities/table.entity";
 import AppDataSource from "../../data-source";
 
-export const retrieveEspecificTableService = async (tableId) => {
+export const retrieveEspecificTableService = async (
+  tableId
+): Promise<Table> => {
   const tableRepository = AppDataSource.getRepository(Table);
 
   const table = await tableRepository.findOneBy({
