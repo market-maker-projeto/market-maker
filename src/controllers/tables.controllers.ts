@@ -1,9 +1,11 @@
+import { retrieveOrdersFromTableService } from "./../services/tables/retrieveOrdersFromATable.service";
 import { updateTableService } from "./../services/tables/updateTable.service";
 import { retrieveEspecificTableService } from "./../services/tables/retrieveEspecificTable.service";
 import { retrieveTablesService } from "./../services/tables/retrieveTables.service";
 import { ITable } from "./../interfaces/tables.interface";
 import { createTableService } from "./../services/tables/createTable.service";
 import { Request, Response } from "express";
+import { deleteTableService } from "../services/tables/deleteTable.service";
 
 export const createTableController = async (req: Request, res: Response) => {
   const tableData: ITable = req.body;
@@ -29,7 +31,8 @@ export const retrieveOrdersFromTableController = async (
   req: Request,
   res: Response
 ) => {
-  return res.status(200).json();
+  const ordersFromTable = retrieveOrdersFromTableService(req.params);
+  return res.status(200).json(ordersFromTable);
 };
 
 export const updateTableController = async (req: Request, res: Response) => {
@@ -38,5 +41,6 @@ export const updateTableController = async (req: Request, res: Response) => {
 };
 
 export const deleteTableController = async (req: Request, res: Response) => {
-  return res.status(204).json();
+  const deleteTable = deleteTableService(req.params);
+  return res.status(204).json(deleteTable);
 };
