@@ -1,3 +1,4 @@
+import { updateTableService } from "./../services/tables/updateTable.service";
 import { retrieveEspecificTableService } from "./../services/tables/retrieveEspecificTable.service";
 import { retrieveTablesService } from "./../services/tables/retrieveTables.service";
 import { ITable } from "./../interfaces/tables.interface";
@@ -32,7 +33,8 @@ export const retrieveOrdersFromTableController = async (
 };
 
 export const updateTableController = async (req: Request, res: Response) => {
-  return res.status(200).json();
+  const updateTable = updateTableService(req.body, req.params);
+  return res.status(200).json(updateTable);
 };
 
 export const deleteTableController = async (req: Request, res: Response) => {
