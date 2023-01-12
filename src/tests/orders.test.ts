@@ -1,6 +1,6 @@
-import { newOder } from "./mocks/orders.mock";
-import { createUserValid, mockedUserLogin } from "./mocks/users.mock";
-import { createTableValid } from "./mocks/tables.mock";
+import { newOrder } from "./mocks/orders.mock";
+import { mockedUser, mockedUserLogin } from "./mocks/users.mock";
+import { mockedTable } from "./mocks/tables.mock";
 import request from "supertest";
 import app from "../app";
 import AppDataSource from "../data-source";
@@ -17,6 +17,9 @@ describe("Testing /orders", () => {
       .catch((err) => {
         console.error("Error during Data Source initialization", err);
       });
+
+    await request(app).post("/users").send(mockedUser);
+    await request(app).post("/tables").send(mockedTable);
   });
 
   afterAll(async () => {
@@ -24,12 +27,12 @@ describe("Testing /orders", () => {
   });
 
   test("POST /orders - should be able to create a order", async () => {
-    const user = await request(app).post("/users").send(createUserValid);
-    const table = await request(app).post("/tables").send(createTableValid);
+    const user = request(app).get("/users");
+    const table = request(app).get("/tables");
 
     const response = await request(app)
       .post("/orders")
-      .send({ ...newOder, table_id: table, client_name: user });
+      .send({ ...newOrder, table_id: table[0], client_name: user[0] });
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual(
@@ -44,12 +47,12 @@ describe("Testing /orders", () => {
   });
 
   test("GET /orders - should be able to list all orders", async () => {
-    const user = await request(app).post("/users").send(createUserValid);
-    const table = await request(app).post("/tables").send(createTableValid);
+    const user = request(app).get("/users");
+    const table = request(app).get("/tables");
 
     const order = await request(app)
       .post("/orders")
-      .send({ ...newOder, table_id: table, client_name: user });
+      .send({ ...newOrder, table_id: table[0], client_name: user[0] });
 
     const response = await request(app).get("/orders");
 
@@ -58,16 +61,16 @@ describe("Testing /orders", () => {
   });
 
   test("GET /orders - should be able to list a especific order", async () => {
-    const user = await request(app).post("/users").send(createUserValid);
-    const table = await request(app).post("/tables").send(createTableValid);
-
+    const user = request(app).get("/users");
+    const table = request(app).get("/tables");
     const order = await request(app)
       .post("/orders")
-      .send({ ...newOder, table_id: table, client_name: user });
+      .send({ ...newOrder, table_id: table[0], client_name: user[0] });
 
     const response = await request(app).get(`/orders/${order.body.id}`);
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(
+    expect(response.body).toHaveProperty("map");
+    expect(response.body[0]).toEqual(
       expect.objectContaining({
         id: "",
         createdAt: "",
@@ -79,12 +82,11 @@ describe("Testing /orders", () => {
   });
 
   test("GET /orders - should be able to list the closed orders", async () => {
-    const user = await request(app).post("/users").send(createUserValid);
-    const table = await request(app).post("/tables").send(createTableValid);
-
+    const user = request(app).get("/users");
+    const table = request(app).get("/tables");
     const order = await request(app)
       .post("/orders")
-      .send({ ...newOder, table_id: table, client_name: user });
+      .send({ ...newOrder, table_id: table[0], client_name: user[0] });
 
     const deletedOrder = await request(app).delete(`/orders/${order.body.id}`);
 
@@ -104,12 +106,11 @@ describe("Testing /orders", () => {
   });
 
   test("DELETE /orders - should be able to delete a order", async () => {
-    const user = await request(app).post("/users").send(createUserValid);
-    const table = await request(app).post("/tables").send(createTableValid);
-
+    const user = request(app).get("/users");
+    const table = request(app).get("/tables");
     const order = await request(app)
       .post("/orders")
-      .send({ ...newOder, table_id: table, client_name: user });
+      .send({ ...newOrder, table_id: table[0], client_name: user[0] });
 
     const response = await request(app).delete(`/orders/${order.body.id}`);
 
@@ -120,7 +121,7 @@ describe("Testing /orders", () => {
     const response = await request(app).delete(
       "/orders/484b3b9a-94b9-4827-b21d-a2c67a24cee5"
     );
-    expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(404);
+    expect(response.body).toHaveProperty("message");
   });
 });
