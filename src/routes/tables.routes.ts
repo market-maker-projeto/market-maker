@@ -1,3 +1,4 @@
+import { verifyAdminMiddleware } from "./../middlewares/verifyIsAdmin.middleware";
 import {
   createTableController,
   retrieveTablesController,
@@ -7,12 +8,43 @@ import {
   deleteTableController,
 } from "./../controllers/tables.controllers";
 import { Router } from "express";
+import { verifyTokenMiddleware } from "../middlewares/verifyToken.middleware";
 
 export const tablesRoutes = Router();
 
-tablesRoutes.post("", createTableController);
-tablesRoutes.get("", retrieveTablesController);
-tablesRoutes.get("/:id", retrieveEspecificTableController);
-tablesRoutes.get("/:id/orders", retrieveOrdersFromTableController);
-tablesRoutes.patch("/:id", updateTableController);
-tablesRoutes.delete("/:id", deleteTableController);
+tablesRoutes.post(
+  "",
+  verifyTokenMiddleware,
+  verifyAdminMiddleware,
+  createTableController
+);
+tablesRoutes.get(
+  "",
+  verifyTokenMiddleware,
+  verifyAdminMiddleware,
+  retrieveTablesController
+);
+tablesRoutes.get(
+  "/:id",
+  verifyTokenMiddleware,
+  verifyAdminMiddleware,
+  retrieveEspecificTableController
+);
+tablesRoutes.get(
+  "/:id/orders",
+  verifyTokenMiddleware,
+  verifyAdminMiddleware,
+  retrieveOrdersFromTableController
+);
+tablesRoutes.patch(
+  "/:id",
+  verifyTokenMiddleware,
+  verifyAdminMiddleware,
+  updateTableController
+);
+tablesRoutes.delete(
+  "/:id",
+  verifyTokenMiddleware,
+  verifyAdminMiddleware,
+  deleteTableController
+);
