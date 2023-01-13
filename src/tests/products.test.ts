@@ -159,7 +159,6 @@ describe("POST/products", () => {
     const productUpdated = await request(app)
       .get(baseUrl)
       .set("Authorization", token);
-    console.log(productUpdated);
 
     expect(response.status).toBe(200);
     expect(productUpdated.body[0]).toHaveProperty("name");
