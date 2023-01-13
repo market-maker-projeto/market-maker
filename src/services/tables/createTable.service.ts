@@ -10,6 +10,12 @@ export const createTableService = async (data: ITable): Promise<Table> => {
     table_number: data.table_number,
   });
 
+  if (
+    (data.isActive = null || data.seats == null || data.table_number == null)
+  ) {
+    throw new AppError("Invalid Table", 400);
+  }
+
   if (tableAlreadyExist) {
     throw new AppError("Table already exist", 409);
   }
