@@ -17,7 +17,7 @@ export const updateCategoryService = async (
   if (!foundCategory) {
     throw new AppError(
       `It should not be possible to update a category that does not exist`,
-      409
+      404
     );
   }
 

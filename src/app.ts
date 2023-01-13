@@ -1,6 +1,6 @@
+import "express-async-errors";
 import { tablesRoutes } from "./routes/tables.routes";
 import { productsRoutes } from "./routes/products.routes";
-import "express-async-errors";
 import "reflect-metadata";
 import express from "express";
 import "dotenv/config";
@@ -20,5 +20,5 @@ app.use("/orders", orderRoutes);
 app.use("/products", productsRoutes);
 app.use("/tables", tablesRoutes);
 
-app.use(errorHandler)
+app.use(errorHandler);
 export default app;
