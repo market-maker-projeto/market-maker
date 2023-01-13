@@ -207,7 +207,6 @@ describe("POST /tables", () => {
       .send(newValues);
 
     expect(response.status).toBe(200);
-    // expect(response.body).toHaveProperty("message");
     expect(response.body).toHaveProperty("id");
     expect(response.body).toHaveProperty("seats");
     expect(response.body).toHaveProperty("isActive");
@@ -266,14 +265,17 @@ describe("POST /tables", () => {
     const userToken = `Bearer ${userLoginResponse.body.token}`;
     const adminToken = `Bearer ${adminLoginResponse.body.token}`;
 
+    const createTable = await request(app)
+      .post(baseUrl)
+      .set("Authorization", adminToken)
+      .send(mockedTable);
+
     const tableTobeDeleted = await request(app)
       .get(baseUrl)
       .set("Authorization", adminToken);
 
-    const tableToDeleteId = tableTobeDeleted.body[0].id;
-
     const response = await request(app)
-      .delete(`${baseUrl}/${tableToDeleteId}`)
+      .delete(`${baseUrl}/${tableTobeDeleted.body[0].id}`)
       .set("Authorization", userToken);
 
     expect(response.status).toBe(403);

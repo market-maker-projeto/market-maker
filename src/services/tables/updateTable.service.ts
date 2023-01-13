@@ -15,8 +15,6 @@ export const updateTableService = async (
     },
   });
 
-  console.log(findTable);
-
   if (!findTable) {
     throw new AppError("table not exist", 404);
   }

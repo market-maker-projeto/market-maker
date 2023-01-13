@@ -1,3 +1,5 @@
+import { tableSerializer } from "./../schemas/tables.schemas";
+import { verifyDataMiddleware } from "./../middlewares/verifyData.middleware";
 import { verifyAdminMiddleware } from "./../middlewares/verifyIsAdmin.middleware";
 import {
   createTableController,
@@ -14,6 +16,7 @@ export const tablesRoutes = Router();
 
 tablesRoutes.post(
   "",
+  verifyDataMiddleware(tableSerializer),
   verifyTokenMiddleware,
   verifyAdminMiddleware,
   createTableController

@@ -42,5 +42,5 @@ export const updateTableController = async (req: Request, res: Response) => {
 
 export const deleteTableController = async (req: Request, res: Response) => {
   const deleteTable = await deleteTableService(req.params.id);
-  return res.status(204).json(deleteTable);
+  return res.status(204).json();
 };

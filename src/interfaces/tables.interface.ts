@@ -6,3 +6,9 @@ export interface ITable {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export interface ItableRequest {
+  seats: number;
+  isActive: boolean;
+  table_number: number;
+}
