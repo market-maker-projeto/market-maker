@@ -7,8 +7,10 @@ export const retrieveEspecificProductService = async (
   idProduct: string
 ): Promise<IProductRequest> => {
   const productRepo = dataSource.getRepository(Product);
-  const product = await productRepo.findOneBy({ id: idProduct });
-
+  const product = await productRepo.findOne({where: {id: idProduct}, relations: {
+    category: true
+  }});
+  
   if (!product) {
     throw new AppError("Product not found", 400);
   }

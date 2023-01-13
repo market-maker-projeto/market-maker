@@ -249,7 +249,6 @@ describe("POST/users", () => {
       .post("/login")
       .send(mockedAdminLogin);
     const userLoginResp = await request(app).post("/login").send({...mockedUserLogin, username: "DouglasRJ"});
-    console.log(userLoginResp.body)
     const userToken = userLoginResp.body.token;
     const adminToken = adminLoginResp.body.token;
 
