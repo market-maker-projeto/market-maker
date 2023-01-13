@@ -15,7 +15,8 @@ export const verifyDataMiddleware = (schema: AnySchema) => async(req: Request, r
         return next()
         
     } catch (error) {
-        throw new AppError(error, 400)
+
+        throw new AppError(`${error.errors[0]}`, 400)
     }
 
 }

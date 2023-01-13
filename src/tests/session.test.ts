@@ -33,7 +33,7 @@ describe("/login", () => {
   test("POST /login -  Should be able to login with the user", async () => {
     const response = await request(app).post(baseUrl).send(mockedUserLogin);
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(201);
     expect(response.body).toHaveProperty("token");
 
   });
@@ -41,7 +41,7 @@ describe("/login", () => {
   test("POST /login -  Should be able to login with the user admin", async () => {
     const response = await request(app).post(baseUrl).send(mockedAdminLogin);
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(201);
     expect(response.body).toHaveProperty("token");
 
   });

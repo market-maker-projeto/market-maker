@@ -12,5 +12,8 @@ export const userSerializer: yup.SchemaOf<IUser> = yup.object().shape({
 export const userWithoutPasswordSerializer:yup.SchemaOf<IUserReturn> = yup.object().shape({
     username: yup.string().notRequired(),
     isAdm: yup.boolean().notRequired(),
-    id: yup.string().notRequired()
+    id: yup.string().notRequired(),
+    createdAt: yup.date().notRequired(),
+    updatedAt: yup.date().notRequired()
 })
+export const allUsersWithoutPassword = yup.array(userWithoutPasswordSerializer)
