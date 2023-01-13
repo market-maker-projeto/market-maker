@@ -167,7 +167,6 @@ describe("POST/category", () => {
       .set("Authorization", adminToken)
       .send(newValues);
 
-
     expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(404);
   });
@@ -186,7 +185,7 @@ describe("POST/category", () => {
 
     const response = await request(app)
       .delete(`${baseUrl}/${categoryToBeDeleted.body[0].id}`)
-      .set("Authorization", `Bearer ${adminToken}`);
+      .set("Authorization", adminToken);
 
     expect(response.status).toBe(204);
   });
@@ -206,7 +205,7 @@ describe("POST/category", () => {
 
     const response = await request(app)
       .delete(`${baseUrl}/${categoryToBeDeleted.body[0].id}`)
-      .set("Authorization", `Bearer ${userToken}`);
+      .set("Authorization", userToken);
 
     expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(403);
@@ -220,7 +219,7 @@ describe("POST/category", () => {
 
     const response = await request(app)
       .delete(`${baseUrl}/13970660-5dbe-423a-9a9d-5c23b37943cf`)
-      .set("Authorization", `Bearer ${adminToken}`);
+      .set("Authorization", adminToken);
 
     expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(404);

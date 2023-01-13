@@ -209,6 +209,7 @@ describe("POST/products", () => {
   });
 
   test("DELETE /products/:id - Should be able to delete a product", async () => {
+    await request(app).post("/users").send(mockedAdmin);
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
