@@ -20,12 +20,13 @@ export const createProductService = async (productData: IProductRequest) => {
   const product = await productRepo.findOneBy({
     name: productData.name,
   });
+  console.log(product);
 
   if (product) {
-    throw new AppError("Product already exists", 404);
+    throw new AppError("Product already exists", 409);
   }
 
-  if (product.price == "" || product.name == "" || product.category == null) {
+  if (productData.price == "" || productData.name == "" || productData.category == null) {
     throw new AppError("Invalid product", 400);
   }
 

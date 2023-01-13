@@ -7,7 +7,7 @@ export const deleteProductService = async (prod_id: string) => {
   const productRepo = dataSource.getRepository(Product);
   const product: IProductRequest = await productRepo.findOneBy({ id: prod_id });
 
-  if (!product.id) {
+  if (!product) {
     throw new AppError("Product not found", 404);
   }
 

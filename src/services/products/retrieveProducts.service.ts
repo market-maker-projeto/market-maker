@@ -5,7 +5,9 @@ import { IProductRequest } from "../../interfaces/products.interface";
 export const retrieveProductsService = async (): Promise<IProductRequest[]> => {
   const productRepo = dataSource.getRepository(Product);
 
-  const products = await productRepo.find();
+  const products = await productRepo.find({relations:{
+    category: true,
+}});
 
   return products;
 };
