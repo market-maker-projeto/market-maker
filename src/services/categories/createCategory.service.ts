@@ -3,6 +3,7 @@ import { Category } from "../../entities/category.entity";
 import { AppError } from "../../errors/AppError";
 import {
   ICategory,
+  ICategoryResponse,
   IMockedCategory,
 } from "../../interfaces/categories.interface";
 

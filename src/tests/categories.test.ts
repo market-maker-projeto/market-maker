@@ -15,7 +15,7 @@ import app from "../app";
 
 describe("POST/category", () => {
   let connection: DataSource;
-  const baseUrl = "/category";
+  const baseUrl = "/categories";
 
   beforeAll(async () => {
     await AppDataSource.initialize()
@@ -107,17 +107,17 @@ describe("POST/category", () => {
     const token = `Bearer ${adminLoginResponse.body.token}`;
 
     const categoryToBeUpdatedRequest = await request(app)
-      .get("/category")
+      .get(baseUrl)
       .set("Authorization", token);
     const categoryToBeUpdatedId = categoryToBeUpdatedRequest.body[0].id;
 
     const response = await request(app)
-      .patch(`/category/${categoryToBeUpdatedId}`)
+      .patch(`${baseUrl}/${categoryToBeUpdatedId}`)
       .set("Authorization", token)
       .send(newValues);
 
     const categoryUpdated = await request(app)
-      .get("/category")
+      .get(baseUrl)
       .set("Authorization", token);
 
     expect(response.status).toBe(200);
@@ -140,12 +140,12 @@ describe("POST/category", () => {
     const userToken = `Bearer ${userLoginResponse.body.token}`;
 
     const categoryToBeUpdated = await request(app)
-      .get("/category")
+      .get(baseUrl)
       .set("Authorization", adminToken);
     const categoryToBeUpdatedId = categoryToBeUpdated.body[0].id;
 
     const response = await request(app)
-      .patch(`/category/${categoryToBeUpdatedId}`)
+      .patch(`${baseUrl}/${categoryToBeUpdatedId}`)
       .set("Authorization", userToken)
       .send(newValues);
 
@@ -159,28 +159,34 @@ describe("POST/category", () => {
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
+
     const adminToken = `Bearer ${adminLoginResponse.body.token}`;
+
     const response = await request(app)
-      .patch(`/category/13970660-5dbe-423a-9a9d-5c23b37943cf`)
+      .patch(`${baseUrl}/13970660-5dbe-423a-9a9d-5c23b37943cff`)
       .set("Authorization", adminToken)
       .send(newValues);
+
+    console.log(response.body);
 
     expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(404);
   });
 
   test("DELETE /category/:id - Should be able to delete a category", async () => {
-    const createAdmin = await request(app).post("/users").send(mockedAdmin);
+    await request(app).post("/users").send(mockedAdmin);
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
+
     const adminToken = `Bearer ${adminLoginResponse.body.token}`;
+
     const categoryToBeDeleted = await request(app)
-      .get("/category")
+      .get(baseUrl)
       .set("Authorization", adminToken);
 
     const response = await request(app)
-      .delete(`/category/${categoryToBeDeleted.body[0].id}`)
+      .delete(`${baseUrl}/${categoryToBeDeleted.body[0].id}`)
       .set("Authorization", `Bearer ${adminToken}`);
 
     expect(response.status).toBe(204);
@@ -192,7 +198,7 @@ describe("POST/category", () => {
       .send(mockedAdminLogin);
     const adminToken = `Bearer ${adminLoginResponse.body.token}`;
     const categoryToBeDeleted = await request(app)
-      .get("/category")
+      .get(baseUrl)
       .set("Authorization", adminToken);
     const userLoginResponse = await request(app)
       .post("/login")
@@ -200,7 +206,7 @@ describe("POST/category", () => {
     const userToken = `Bearer ${userLoginResponse.body.token}`;
 
     const response = await request(app)
-      .delete(`/category/${categoryToBeDeleted.body[0].id}`)
+      .delete(`${baseUrl}/${categoryToBeDeleted.body[0].id}`)
       .set("Authorization", `Bearer ${userToken}`);
 
     expect(response.body).toHaveProperty("message");
@@ -214,7 +220,7 @@ describe("POST/category", () => {
     const adminToken = `Bearer ${adminLoginResponse.body.token}`;
 
     const response = await request(app)
-      .delete(`/category/13970660-5dbe-423a-9a9d-5c23b37943cf`)
+      .delete(`${baseUrl}/13970660-5dbe-423a-9a9d-5c23b37943cf`)
       .set("Authorization", `Bearer ${adminToken}`);
 
     expect(response.body).toHaveProperty("message");

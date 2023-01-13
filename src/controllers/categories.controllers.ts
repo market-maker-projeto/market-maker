@@ -29,11 +29,11 @@ export const retrieveEspecificCategoryController = async (
 };
 
 export const updateCategoryController = async (req: Request, res: Response) => {
-  const updatedCategory = updateCategoryService(req.params.id, req.body);
+  const updatedCategory = await updateCategoryService(req.params.id, req.body);
   return res.status(200).json(updatedCategory);
 };
 
 export const deleteCategoryController = async (req: Request, res: Response) => {
-  const message = deleteCategoryService(req.params.id);
+  const message = await deleteCategoryService(req.params.id);
   return res.status(204).json(message);
 };

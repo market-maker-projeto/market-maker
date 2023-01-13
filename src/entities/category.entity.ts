@@ -23,9 +23,6 @@ export class Category {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @DeleteDateColumn()
-  deletedAt: Date;
-
   @OneToMany(() => Product, (product) => product.category)
   product: Product;
 }

@@ -30,9 +30,6 @@ export class Table {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @DeleteDateColumn()
-  deletedAt: Date;
-
   @OneToMany(() => Order, (order) => order.table)
   @JoinColumn()
   orders: Order[];
