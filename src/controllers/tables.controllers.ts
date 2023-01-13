@@ -23,7 +23,7 @@ export const retrieveEspecificTableController = async (
   req: Request,
   res: Response
 ) => {
-  const table = await retrieveEspecificTableService(req.params);
+  const table = await retrieveEspecificTableService(req.params.id);
   return res.status(200).json(table);
 };
 
@@ -31,16 +31,16 @@ export const retrieveOrdersFromTableController = async (
   req: Request,
   res: Response
 ) => {
-  const ordersFromTable = await retrieveOrdersFromTableService(req.params);
+  const ordersFromTable = await retrieveOrdersFromTableService(req.params.id);
   return res.status(200).json(ordersFromTable);
 };
 
 export const updateTableController = async (req: Request, res: Response) => {
-  const updateTable = await updateTableService(req.body, req.params);
+  const updateTable = await updateTableService(req.body, req.params.id);
   return res.status(200).json(updateTable);
 };
 
 export const deleteTableController = async (req: Request, res: Response) => {
-  const deleteTable = await deleteTableService(req.params);
+  const deleteTable = await deleteTableService(req.params.id);
   return res.status(204).json(deleteTable);
 };

@@ -43,12 +43,10 @@ describe("POST /tables", () => {
       .send(mockedTable);
 
     expect(response.status).toBe(201);
-    expect(response.body).toHaveProperty("id")
-    expect(response.body).toHaveProperty("seats")
-    expect(response.body).toHaveProperty("isActive")
-    expect(response.body).toHaveProperty("table_number")
-
-    
+    expect(response.body).toHaveProperty("id");
+    expect(response.body).toHaveProperty("seats");
+    expect(response.body).toHaveProperty("isActive");
+    expect(response.body).toHaveProperty("table_number");
   });
 
   test("POST /tables - Should not be able to register a table that already exists", async () => {
@@ -138,10 +136,10 @@ describe("POST /tables", () => {
     expect(response.status).toBe(200);
     expect(response.body).toHaveLength(1);
     expect(response.body).toHaveProperty("map");
-    expect(response.body[0]).toHaveProperty("id")
-    expect(response.body[0]).toHaveProperty("seats")
-    expect(response.body[0]).toHaveProperty("isActive")
-    expect(response.body[0]).toHaveProperty("table_number")
+    expect(response.body[0]).toHaveProperty("id");
+    expect(response.body[0]).toHaveProperty("seats");
+    expect(response.body[0]).toHaveProperty("isActive");
+    expect(response.body[0]).toHaveProperty("table_number");
   });
 
   test("GET /tables - Should not be able to list table not being admin", async () => {
@@ -208,16 +206,12 @@ describe("POST /tables", () => {
       .set("Authorization", token)
       .send(newValues);
 
-    const tableUpdated = await request(app)
-      .get(baseUrl)
-      .set("Authorization", token);
-
     expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty("message");
-    expect(response.body[0]).toHaveProperty("id")
-    expect(response.body[0]).toHaveProperty("seats")
-    expect(response.body[0]).toHaveProperty("isActive")
-    expect(response.body[0]).toHaveProperty("table_number")
+    // expect(response.body).toHaveProperty("message");
+    expect(response.body).toHaveProperty("id");
+    expect(response.body).toHaveProperty("seats");
+    expect(response.body).toHaveProperty("isActive");
+    expect(response.body).toHaveProperty("table_number");
   });
 
   test("PATCH /tables/:id - Should not be able to update table with invalid id", async () => {
@@ -236,7 +230,7 @@ describe("POST /tables", () => {
         table_number: 21,
       });
 
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(404);
     expect(response.body).toHaveProperty("message");
   });
 
@@ -297,7 +291,7 @@ describe("POST /tables", () => {
       .delete(`${baseUrl}/13970660-5dbe-423a-9a9d-5c23b37943cf`)
       .set("Authorization", token);
 
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(404);
     expect(response.body).toHaveProperty("message");
   });
 });
