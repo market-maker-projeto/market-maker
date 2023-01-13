@@ -13,13 +13,17 @@ export const updateProductService = async (
   if (!product) {
     throw new AppError("Product doesnt exists", 400);
   }
+  console.log(product)
+  // delete product.updatedAt
+  // delete product.createdAt
+  // delete product.deletedAt
 
-  const updateProduct = productRepo.create({
-    ...product,
-    ...prodData,
-  });
+  // const updateProduct = productRepo.create({
+  //   ...product,
+  //   ...prodData,
+  // });
 
-  await productRepo.save(updateProduct);
+  // await productRepo.save(updateProduct);
 
-  return updateProduct;
+  // return updateProduct;
 };
