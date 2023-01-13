@@ -191,6 +191,7 @@ describe("POST/category", () => {
   });
 
   test("DELETE /category/:id - Should not be able to delete a category not being admin", async () => {
+    await request(app).post("/users").send(mockedAdmin);
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
@@ -224,4 +225,5 @@ describe("POST/category", () => {
     expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(404);
   });
+
 });
