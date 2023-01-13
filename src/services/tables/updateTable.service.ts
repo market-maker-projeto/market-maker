@@ -5,12 +5,14 @@ import AppDataSource from "../../data-source";
 
 export const updateTableService = async (
   data: ITable,
-  tableId
+  tableId: string
 ): Promise<Table> => {
   const tableRepository = AppDataSource.getRepository(Table);
 
-  const findTable = await tableRepository.findOneBy({
-    id: tableId,
+  const findTable = await tableRepository.findOne({
+    where: {
+      id: tableId,
+    },
   });
 
   if (!findTable) {
