@@ -25,6 +25,10 @@ export const createProductService = async (productData: IProductRequest) => {
     throw new AppError("Product already exists", 404);
   }
 
+  if (product.price == "" || product.name == "" || product.category == null) {
+    throw new AppError("Invalid product", 400);
+  }
+
   const newProduct = productRepo.create({
     ...productData,
     category: category,
