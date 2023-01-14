@@ -1,7 +1,11 @@
 import { Request, Response } from "express";
+import { createOrderService } from "../services/orders/createOrder.service";
 
 export const createOrderController = async (req: Request, res: Response) => {
-  return res.status(201).json();
+  const order = req.body;
+  const orderResponse = await createOrderService(order);
+
+  return res.status(201).json(orderResponse);
 };
 
 export const retrieveOrdersController = async (req: Request, res: Response) => {
