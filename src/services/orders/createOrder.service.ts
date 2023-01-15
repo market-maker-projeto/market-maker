@@ -1,6 +1,6 @@
+import { ProductsToOrder } from "./../../entities/producstToOrder.entity";
+import { Order } from "./../../entities/order.entity";
 import AppDataSource from "../../data-source";
-import { Order } from "../../entities/order.entity";
-import { ProductsToOrder } from "../../entities/producstToOrder.entity";
 import { Product } from "../../entities/product.entity";
 import { Table } from "../../entities/table.entity";
 import { User } from "../../entities/user.entity";
@@ -60,13 +60,13 @@ export const createOrderService = async ({
     id: orderIdResponse.id,
   });
 
-  productsInfo.map(async (product) => {
+  productsInfo.forEach(async (product) => {
     const orderDatabasePivotSave = {
       order: foundOrderCreated,
       product: product,
     };
     const productToOrders = orders_productsRepo.create(orderDatabasePivotSave);
-    orders_productsRepo.save(productToOrders);
+    await orders_productsRepo.save(productToOrders);
   });
 
   const orderReponse = {
@@ -75,6 +75,31 @@ export const createOrderService = async ({
     table: tableInfo,
     products: productsInfo,
   };
+  const foundOrderCreatedId = foundOrderCreated.id;
+
+
+// GET ALL
+  // const testReturn = await orders_productsRepo
+  // .createQueryBuilder()
+  // .innerJoinAndSelect("ProductsToOrder.order", "order")
+  // .innerJoinAndSelect("order.user", "user")
+  // .innerJoinAndSelect("order.table", "table")
+  // .innerJoinAndSelect("ProductsToOrder.product", "product")
+  // .getMany()
+
+// GET SPECIFIC
+  // const teste2 = await orders_productsRepo
+  // .createQueryBuilder()
+  // .innerJoinAndMapMany("ProductsToOrder.order", "order", "orders")
+  //   .innerJoinAndSelect("orders.user", "user")
+  // .innerJoinAndSelect("orders.table", "table")
+  // .innerJoinAndSelect("ProductsToOrder.product", "product")
+  // .where(`orders.id = '${foundOrderCreatedId}'`)
+  // .getOne()
+
+
+
+
 
   return orderReponse;
 };
