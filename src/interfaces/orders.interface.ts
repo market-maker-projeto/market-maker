@@ -5,8 +5,10 @@ export interface IOrderRequest {
   products: [{ id: string }];
 }
 
-export interface iOrder extends IOrderRequest {
+export interface IOrderResponse {
   id: string;
-  createdAt: string;
-  deletedAt?: string;
+  client_name: string;
+  user: Object;
+  table: Object;
+  products: Array<{}>;
 }

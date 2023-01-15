@@ -5,19 +5,22 @@ import { Product } from "../../entities/product.entity";
 import { Table } from "../../entities/table.entity";
 import { User } from "../../entities/user.entity";
 import { AppError } from "../../errors/AppError";
-import { IOrderRequest } from "../../interfaces/orders.interface";
+import {
+  IOrderRequest,
+  IOrderResponse,
+} from "../../interfaces/orders.interface";
 
 export const createOrderService = async ({
   user_id,
   table_id,
   client_name,
   products,
-}: IOrderRequest) => {
+}): Promise<IOrderResponse> => {
   if (table_id.length != 36 || user_id.length != 36) {
     throw new AppError("Invalid Informations", 400);
   }
 
-  products.forEach((product) => {
+  products.forEach((product: any) => {
     if (product.id.length != 36) {
       throw new AppError("Product not found", 404);
     }
@@ -39,13 +42,13 @@ export const createOrderService = async ({
 
   const foundProducts = await productsRepo.find();
 
-  const productsInfo = foundProducts.filter((elem) => {
-    const product = products.filter((product) => {
-      if (elem.id == product.id) {
+  const productsInfo = products.map((elem: any) => {
+    const productFilter = foundProducts.filter((product: any) => {
+      if (elem.id === product.id) {
         return product;
       }
     });
-    return product;
+    return productFilter[0];
   });
 
   const orderDatabase = {
@@ -60,7 +63,7 @@ export const createOrderService = async ({
     id: orderIdResponse.id,
   });
 
-  productsInfo.forEach(async (product) => {
+  productsInfo.forEach(async (product: any) => {
     const orderDatabasePivotSave = {
       order: foundOrderCreated,
       product: product,
@@ -68,6 +71,18 @@ export const createOrderService = async ({
     const productToOrders = orders_productsRepo.create(orderDatabasePivotSave);
     await orders_productsRepo.save(productToOrders);
   });
+
+  // const orderSave = {
+  //   order: foundOrderCreated,
+  //   product: productsInfo,
+  // };
+
+  // console.log(orderSave);
+
+  // const productToOrders = orders_productsRepo.create(orderSave);
+  // await orders_productsRepo.save(productToOrders);
+
+  delete userInfo.password;
 
   const orderReponse = {
     id: foundOrderCreated.id,

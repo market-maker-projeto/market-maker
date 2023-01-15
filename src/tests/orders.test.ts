@@ -74,13 +74,6 @@ describe("Testing /orders", () => {
   });
 
   test("GET /orders - should be able to list all orders", async () => {
-    const user = request(app).get("/users");
-    const table = request(app).get("/tables");
-
-    const order = await request(app)
-      .post("/orders")
-      .send({ ...newOrder, table_id: table[0], client_name: user[0] });
-
     const response = await request(app).get("/orders");
 
     expect(response.status).toBe(200);

@@ -13,5 +13,5 @@ export class ProductsToOrder {
 
   @ManyToOne(() => Product, (product) => product.productsToOrder)
   @JoinColumn()
-  product: Product;
+  product: Product[];
 }
