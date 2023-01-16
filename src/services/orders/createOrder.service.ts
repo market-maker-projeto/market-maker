@@ -72,15 +72,12 @@ export const createOrderService = async ({
     await orders_productsRepo.save(productToOrders);
   });
 
-  // const orderSave = {
-  //   order: foundOrderCreated,
-  //   product: productsInfo,
-  // };
+  const orderSave = {
+    order: foundOrderCreated,
+  };
 
-  // console.log(orderSave);
-
-  // const productToOrders = orders_productsRepo.create(orderSave);
-  // await orders_productsRepo.save(productToOrders);
+  const productToOrders = orders_productsRepo.create(orderSave);
+  await orders_productsRepo.save(productToOrders);
 
   delete userInfo.password;
 
