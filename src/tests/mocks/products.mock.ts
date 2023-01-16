@@ -1,4 +1,4 @@
-import { ICategory } from './../../interfaces/categories.interface';
+import { ICategory } from "./../../interfaces/categories.interface";
 import {
   IProduct,
   IProductInvalid,
@@ -7,19 +7,18 @@ import {
 
 export const mockedProduct: IProduct = {
   name: "Cerveja Long Neck",
-  category:"Bebidas",
-
+  category: "Bebidas",
   price: "8.99",
   in_stock: true,
 };
 export const mockedProductResponse: IProductResponse = {
   name: "Cerveja Long neck",
-  category: {name: "bebidas", id: ""},
+  category: { name: "bebidas", id: "" },
   price: "8.99",
   in_stock: true,
   id: "",
-  createdAt: new Date,
-  updatedAt: new Date,
+  createdAt: new Date(),
+  updatedAt: new Date(),
   deletedAt: null,
 };
 export const invalidProduct: IProductInvalid = {

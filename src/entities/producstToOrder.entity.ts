@@ -11,7 +11,8 @@ export class ProductsToOrder {
   @JoinColumn()
   order: Order;
 
-  @ManyToOne(() => Product, (product) => product.productsToOrder)
-  @JoinColumn()
-  product: Product;
+  @ManyToOne(() => Product, (product) => product.productsToOrder, {
+    eager: true,
+  })
+  product: Product[];
 }
