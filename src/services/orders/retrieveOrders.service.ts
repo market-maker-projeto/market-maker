@@ -1,16 +1,10 @@
-import { ProductsToOrder } from "../../entities/producstToOrder.entity";
 import AppDataSource from "../../data-source";
+import { Order } from "../../entities/order.entity";
 
 export const retrieveOrdersService = async () => {
-  const orders_productsRepo = AppDataSource.getRepository(ProductsToOrder);
+  const ordersRepo = AppDataSource.getRepository(Order);
 
-  const ordersResponse = await orders_productsRepo
-    .createQueryBuilder()
-    .innerJoinAndSelect("ProductsToOrder.order", "order")
-    .innerJoinAndSelect("order.user", "user")
-    .innerJoinAndSelect("order.table", "table")
-    .innerJoinAndSelect("ProductsToOrder.product", "product")
-    .getMany();
+  const findOrders = await ordersRepo.find();
 
-  return ordersResponse;
+  return findOrders;
 };

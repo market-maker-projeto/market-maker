@@ -88,34 +88,58 @@ describe("Testing /orders", () => {
     expect(response.body).toHaveLength(1);
   });
 
-  test("GET /orders - should be able to list the closed orders", async () => {
-    const user = request(app).get("/users");
-    const table = request(app).get("/tables");
-    const order = await request(app)
-      .post("/orders")
-      .send({ ...newOrder, table_id: table[0], client_name: user[0] });
+  test("GET /orders - Should be able to list the closed orders", async () => {
+    const retrieveDeleteOrder = await request(app).get("/orders");
 
-    await request(app).delete(`/orders/${order.body.id}`);
+    await request(app).delete(`/orders/${retrieveDeleteOrder.body[0].id}`);
 
-    const response = await request(app).get("/orders/deleted");
+    const response = await request(app).get(
+      `/orders/deleted/${retrieveDeleteOrder.body[0].id}`
+    );
 
     expect(response.status).toBe(200);
-
-    expect(response.body[0]).toHaveProperty("createdAt");
-    expect(response.body[0]).toHaveProperty("user_id");
-    expect(response.body[0]).toHaveProperty("table_id");
-    expect(response.body[0]).toHaveProperty("client_name");
-    expect(response.body[0]).toHaveProperty("deletedAt");
+    expect(response.body).toHaveProperty("deletedAt");
+    expect(response.body.deletedAt).not.toEqual(null);
   });
 
   test("DELETE /orders - should be able to delete a order", async () => {
-    const user = request(app).get("/users");
-    const table = request(app).get("/tables");
-    const order = await request(app)
-      .post("/orders")
-      .send({ ...newOrder, table_id: table[0], client_name: user[0] });
+    const adminLogin = await request(app).post("/login").send(mockedAdmin);
 
-    const response = await request(app).delete(`/orders/${order.body.id}`);
+    const token = `Bearer ${adminLogin.body.token}`;
+
+    await request(app)
+      .post("/tables")
+      .set("Authorization", token)
+      .send(mockedTable);
+
+    await request(app)
+      .post("/products")
+      .set("Authorization", token)
+      .send(mockedProduct);
+
+    const userInfo = await request(app).get("/users");
+
+    const tableInfo = await request(app)
+      .get("/tables")
+      .set("Authorization", token);
+
+    const productInfo = await request(app).get("/products");
+
+    await request(app)
+      .post("/orders")
+      .set("Authorization", token)
+      .send({
+        table_id: tableInfo.body[0].id,
+        user_id: userInfo.body[0].id,
+        client_name: "cliente",
+        products: [{ id: productInfo.body[0].id }],
+      });
+
+    const orderResponse = await request(app).get("/orders");
+
+    const orderToBeDeleted = orderResponse.body[0].id;
+
+    const response = await request(app).delete(`/orders/${orderToBeDeleted}`);
 
     expect(response.status).toBe(204);
   });
