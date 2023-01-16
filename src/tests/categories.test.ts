@@ -84,11 +84,11 @@ describe("POST/categories", () => {
   });
 
   test("GET /categories - Should be able to list all categories", async () => {
-    const adminLoginResponse = await request(app)
+    const userLoginResponse = await request(app)
       .post("/login")
-      .send(mockedAdminLogin);
+      .send(mockedUser);
 
-    const token = `Bearer ${adminLoginResponse.body.token}`;
+    const token = `Bearer ${userLoginResponse.body.token}`;
 
     const response = await request(app)
       .get(baseUrl)
