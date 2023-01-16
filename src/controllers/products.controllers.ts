@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import {
   IProduct,
   IProductRequest,
+  IProductRequestCategory,
 } from "../../src/interfaces/products.interface";
 import { createProductService } from "../services/products/createProduct.service";
 import { deleteProductService } from "../services/products/deleteProduct.service";
@@ -10,7 +11,7 @@ import { retrieveProductsService } from "../services/products/retrieveProducts.s
 import { updateProductService } from "../services/products/updateProduct.service";
 
 export const createProductController = async (req: Request, res: Response) => {
-  const productData: IProductRequest = req.body;
+  const productData: IProductRequestCategory = req.body;
   const newProduct = await createProductService(productData);
   return res.status(201).json(newProduct);
 };

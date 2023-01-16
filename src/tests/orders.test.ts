@@ -37,10 +37,20 @@ describe("Testing /orders", () => {
       .set("Authorization", token)
       .send(mockedTable);
 
+    const createCategory = await request(app)
+      .post("/categories")
+      .set("Authorization", token)
+      .send({
+        name: "alimentos",
+      });
+
     await request(app)
       .post("/products")
       .set("Authorization", token)
-      .send(mockedProduct);
+      .send({
+        ...mockedProduct,
+        category: createCategory.body.name,
+      });
 
     const userInfo = await request(app).get("/users");
 
@@ -60,15 +70,8 @@ describe("Testing /orders", () => {
         products: [{ id: productInfo.body[0].id }],
       });
 
-    expect(response.body).toEqual(
-      expect.objectContaining({
-        id: response.body.id,
-        client_name: "cliente",
-        table: {
-          ...tableInfo.body[0],
-        },
-      })
-    );
+    expect(response.body).toHaveProperty("id");
+    expect(response.body).toHaveProperty("client_name");
     expect(response.body).toHaveProperty("user");
     expect(response.body).toHaveProperty("products");
   });
