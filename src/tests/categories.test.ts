@@ -113,9 +113,27 @@ describe("POST/categories", () => {
       .get(`${baseUrl}/${category.body[0].id}`)
       .set("Authorization", token);
 
-    console.log(response.body);
     expect(response.status).toBe(200);
     expect(response.body).toHaveLength(1);
+  });
+
+  test("GET /categories/product/:id - Must be able to list all products from a category", async () => {
+    const userLoginResponse = await request(app)
+      .post("/login")
+      .send(mockedUser);
+
+    const token = `Bearer ${userLoginResponse.body.token}`;
+
+    const category = await request(app)
+      .get(baseUrl)
+      .set("Authorization", token);
+
+    const response = await request(app)
+      .get(`${baseUrl}/product/${category.body[0].id}`)
+      .set("Authorization", token);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("map");
   });
 
   test("PATCH /categories/:id- Should be able to edit a category", async () => {
