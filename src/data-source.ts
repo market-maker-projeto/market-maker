@@ -37,7 +37,7 @@ const setDataSourceConfig = (): DataSourceOptions => {
     port: parseInt(process.env.PGPORT),
     database: process.env.DB,
     synchronize: false,
-    logging: true,
+    logging: false,
     entities: [entitiesPath],
     migrations: [migrationsPath],
   };

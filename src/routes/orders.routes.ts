@@ -12,5 +12,5 @@ export const orderRoutes = Router();
 orderRoutes.post("", createOrderController);
 orderRoutes.get("", retrieveOrdersController);
 orderRoutes.get("/:id", retrieveEspecificOrderController);
-orderRoutes.get("/deleted", retrieveClosedOrdersController);
-orderRoutes.delete("/:id"), deleteOrderController;
+orderRoutes.get("/deleted/:id", retrieveClosedOrdersController);
+orderRoutes.delete("/:id", deleteOrderController);

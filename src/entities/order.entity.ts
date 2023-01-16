@@ -26,14 +26,18 @@ export class Order {
   @DeleteDateColumn()
   deletedAt: Date;
 
-  @ManyToOne(() => Table, (table) => table.orders)
+  @ManyToOne(() => Table, (table) => table.orders, { eager: true })
   @JoinColumn()
   table: Table;
 
-  @ManyToOne(() => User, (user) => user.orders)
+  @ManyToOne(() => User, (user) => user.orders, { eager: true })
   @JoinColumn()
   user: User;
 
-  @OneToMany(() => ProductsToOrder, (productsToOrder) => productsToOrder.order)
+  @OneToMany(
+    () => ProductsToOrder,
+    (productsToOrder) => productsToOrder.order,
+    { eager: true }
+  )
   productsToOrder: ProductsToOrder;
 }

@@ -35,7 +35,7 @@ export class Product {
   @DeleteDateColumn()
   deletedAt: Date;
 
-  @ManyToOne(() => Category, (category) => category.product)
+  @ManyToOne(() => Category, (category) => category.product, { eager: true })
   @JoinColumn()
   category: Category;
 
