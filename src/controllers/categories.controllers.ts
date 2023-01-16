@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { createCategoryService } from "../services/categories/createCategory.service";
 import { deleteCategoryService } from "../services/categories/deleteCategory.service";
+import { listAllProductCategoryService } from "../services/categories/listAllProductCategory.service";
 import { retrieveCategoriesService } from "../services/categories/retrieveCategories.service";
 import { retrieveEspecificCategoryService } from "../services/categories/retrieveEspecificCategory.service";
 import { updateCategoryService } from "../services/categories/updateCategory.service";
@@ -27,6 +28,11 @@ export const retrieveEspecificCategoryController = async (
   );
   return res.status(200).json(listSingleCategory);
 };
+
+export const listAllProductCategoryController = async (req: Request, res: Response) => {
+  const listAllProduct = await listAllProductCategoryService(req.params.id)
+  return res.status(200).json(listAllProduct)
+} 
 
 export const updateCategoryController = async (req: Request, res: Response) => {
   const updatedCategory = await updateCategoryService(req.params.id, req.body);
