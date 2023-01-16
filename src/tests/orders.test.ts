@@ -50,6 +50,8 @@ describe("Testing /orders", () => {
 
     const productInfo = await request(app).get("/products");
 
+    console.log(productInfo.body);
+
     const response = await request(app)
       .post("/orders")
       .set("Authorization", token)
@@ -57,7 +59,7 @@ describe("Testing /orders", () => {
         table_id: tableInfo.body[0].id,
         user_id: userInfo.body[0].id,
         client_name: "cliente",
-        products: [{ id: productInfo.body[0].id }],
+        products: [{ id: productInfo.body.id }],
       });
 
     expect(response.body).toEqual(

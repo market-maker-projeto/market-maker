@@ -21,8 +21,8 @@ export const updateProductService = async (
   }
 
   const updateProduct = productRepo.create({
-    ...prodData,
     ...product,
+    ...prodData,
   });
 
   await productRepo.save(updateProduct);
