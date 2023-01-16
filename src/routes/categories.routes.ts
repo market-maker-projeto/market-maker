@@ -20,8 +20,18 @@ categoriesRoutes.post(
   verifyAdminMiddleware,
   createCategoryController
 );
-categoriesRoutes.get("", verifyTokenMiddleware, retrieveCategoriesController);
-categoriesRoutes.get("/:id", retrieveEspecificCategoryController);
+categoriesRoutes.get(
+  "",
+  verifyTokenMiddleware,
+  verifyAdminMiddleware,
+  retrieveCategoriesController
+);
+categoriesRoutes.get(
+  "/:id",
+  verifyTokenMiddleware,
+  verifyAdminMiddleware,
+  retrieveEspecificCategoryController
+);
 categoriesRoutes.patch(
   "/:id",
   verifyTokenMiddleware,
