@@ -32,6 +32,7 @@ categoriesRoutes.get(
   verifyAdminMiddleware,
   retrieveEspecificCategoryController
 );
+categoriesRoutes.get("/product/:id", verifyTokenMiddleware, );
 categoriesRoutes.patch(
   "/:id",
   verifyTokenMiddleware,
