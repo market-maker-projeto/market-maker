@@ -4,10 +4,12 @@ import { Category } from "../../entities/category.entity";
 
 export const retrieveEspecificCategoryService = async (
   idCategory: string
-): Promise<IMockedCategory> => {
+): Promise<IMockedCategory[]> => {
   const categoryRepository = AppDataSource.getRepository(Category);
 
-  const listSingleCategory = await categoryRepository.findOneBy({ id: idCategory });
+  const listSingleCategory = await categoryRepository.find({
+    where: { id: idCategory },
+  });
 
   return listSingleCategory;
 };

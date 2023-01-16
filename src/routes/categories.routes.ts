@@ -1,6 +1,7 @@
 import {
   createCategoryController,
   deleteCategoryController,
+  listAllProductCategoryController,
   retrieveCategoriesController,
   retrieveEspecificCategoryController,
   updateCategoryController,
@@ -20,8 +21,18 @@ categoriesRoutes.post(
   verifyAdminMiddleware,
   createCategoryController
 );
-categoriesRoutes.get("", verifyTokenMiddleware, retrieveCategoriesController);
-categoriesRoutes.get("/:id", retrieveEspecificCategoryController);
+categoriesRoutes.get(
+  "",
+  verifyTokenMiddleware,
+  retrieveCategoriesController
+);
+categoriesRoutes.get(
+  "/:id",
+  verifyTokenMiddleware,
+  verifyAdminMiddleware,
+  retrieveEspecificCategoryController
+);
+categoriesRoutes.get("/product/:id", verifyTokenMiddleware, listAllProductCategoryController, );
 categoriesRoutes.patch(
   "/:id",
   verifyTokenMiddleware,

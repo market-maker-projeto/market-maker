@@ -13,7 +13,7 @@ import AppDataSource from "../data-source";
 import request from "supertest";
 import app from "../app";
 
-describe("POST/category", () => {
+describe("POST/categories", () => {
   let connection: DataSource;
   const baseUrl = "/categories";
 
@@ -34,7 +34,7 @@ describe("POST/category", () => {
     await connection.destroy();
   });
 
-  test("POST /category - Must be able to create a category", async () => {
+  test("POST /categories - Must be able to create a category", async () => {
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
@@ -51,7 +51,7 @@ describe("POST/category", () => {
     expect(response.body).toHaveProperty("id");
   });
 
-  test("POST /category - Should not be able to create a category that already exists", async () => {
+  test("POST /categories - Should not be able to create a category that already exists", async () => {
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
@@ -67,7 +67,7 @@ describe("POST/category", () => {
     expect(response.body).toHaveProperty("message");
   });
 
-  test("POST /category - Should not be able to create a category not being admin", async () => {
+  test("POST /categories - Should not be able to create a category not being admin", async () => {
     const userLoginResponse = await request(app)
       .post("/login")
       .send(mockedUserLogin);
@@ -83,12 +83,12 @@ describe("POST/category", () => {
     expect(response.body).toHaveProperty("message");
   });
 
-  test("GET /category - Should be able to list all categories", async () => {
-    const adminLoginResponse = await request(app)
+  test("GET /categories - Should be able to list all categories", async () => {
+    const userLoginResponse = await request(app)
       .post("/login")
-      .send(mockedAdminLogin);
+      .send(mockedUser);
 
-    const token = `Bearer ${adminLoginResponse.body.token}`;
+    const token = `Bearer ${userLoginResponse.body.token}`;
 
     const response = await request(app)
       .get(baseUrl)
@@ -98,7 +98,45 @@ describe("POST/category", () => {
     expect(response.body).toHaveProperty("map");
   });
 
-  test("PATCH /category/:id- Should be able to edit a category", async () => {
+  test("GET /categories/:id - Should be able to list a specific category", async () => {
+    const adminLoginResponse = await request(app)
+      .post("/login")
+      .send(mockedAdminLogin);
+
+    const token = `Bearer ${adminLoginResponse.body.token}`;
+
+    const category = await request(app)
+      .get(baseUrl)
+      .set("Authorization", token);
+
+    const response = await request(app)
+      .get(`${baseUrl}/${category.body[0].id}`)
+      .set("Authorization", token);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveLength(1);
+  });
+
+  test("GET /categories/product/:id - Must be able to list all products from a category", async () => {
+    const userLoginResponse = await request(app)
+      .post("/login")
+      .send(mockedUser);
+
+    const token = `Bearer ${userLoginResponse.body.token}`;
+
+    const category = await request(app)
+      .get(baseUrl)
+      .set("Authorization", token);
+
+    const response = await request(app)
+      .get(`${baseUrl}/product/${category.body[0].id}`)
+      .set("Authorization", token);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("map");
+  });
+
+  test("PATCH /categories/:id- Should be able to edit a category", async () => {
     const newValues = { name: "Alimentação" };
 
     const adminLoginResponse = await request(app)
@@ -125,7 +163,7 @@ describe("POST/category", () => {
     expect(categoryUpdated.body[0]).toHaveProperty("id");
   });
 
-  test("PATCH /category/:id - Should not be able to edit a category not being admin", async () => {
+  test("PATCH /categories/:id - Should not be able to edit a category not being admin", async () => {
     const newValues = { name: "Alimentação" };
 
     const createAdmin = await request(app).post("/users").send(mockedAdmin);
@@ -153,7 +191,7 @@ describe("POST/category", () => {
     expect(response.status).toBe(403);
   });
 
-  test("PATCH /category/:id - Should not be able to edit a category that doesnt exists", async () => {
+  test("PATCH /categories/:id - Should not be able to edit a category that doesnt exists", async () => {
     const newValues = { name: "Alimentação" };
 
     const adminLoginResponse = await request(app)
@@ -171,7 +209,7 @@ describe("POST/category", () => {
     expect(response.status).toBe(404);
   });
 
-  test("DELETE /category/:id - Should be able to delete a category", async () => {
+  test("DELETE /categories/:id - Should be able to delete a category", async () => {
     await request(app).post("/users").send(mockedAdmin);
     const adminLoginResponse = await request(app)
       .post("/login")
@@ -190,7 +228,7 @@ describe("POST/category", () => {
     expect(response.status).toBe(204);
   });
 
-  test("DELETE /category/:id - Should not be able to delete a category not being admin", async () => {
+  test("DELETE /categories/:id - Should not be able to delete a category not being admin", async () => {
     await request(app).post("/users").send(mockedAdmin);
     const adminLoginResponse = await request(app)
       .post("/login")
@@ -212,7 +250,7 @@ describe("POST/category", () => {
     expect(response.status).toBe(403);
   });
 
-  test("DELETE /category/:id - Should not be able to delete a category that doesnt exists", async () => {
+  test("DELETE /categories/:id - Should not be able to delete a category that doesnt exists", async () => {
     const adminLoginResponse = await request(app)
       .post("/login")
       .send(mockedAdminLogin);
@@ -225,5 +263,4 @@ describe("POST/category", () => {
     expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(404);
   });
-
 });
