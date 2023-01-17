@@ -16,7 +16,9 @@ import { hashSync } from "bcryptjs";
 export class User {
   @PrimaryGeneratedColumn("uuid")
   id: string;
-
+  
+  @Column({length: 120, type:"varchar"})
+  name: string;
   @Column({ length: 120, type: "varchar" })
   username: string;
 
