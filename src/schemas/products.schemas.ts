@@ -10,3 +10,17 @@ export const productsSchema: SchemaOf<IProductRequestCategory> = yup
     price: yup.string().required(),
     in_stock: yup.boolean().required(),
   });
+
+export const listAllProdutSchema: SchemaOf<IProductRequestCategory> = yup
+  .object()
+  .shape({
+    name: yup.string().required(),
+    category: yup
+      .object({
+        id: yup.string(),
+        name: yup.string(),
+      })
+      .required(),
+    price: yup.string().required(),
+    in_stock: yup.boolean().required(),
+  });

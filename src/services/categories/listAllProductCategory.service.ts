@@ -2,6 +2,7 @@ import AppDataSource from "../../data-source";
 import { Category } from "../../entities/category.entity";
 import { Product } from "../../entities/product.entity";
 import { ICategoryProdResponse } from "../../interfaces/products.interface";
+import { listAllProdutSchema } from "../../schemas/products.schemas";
 
 export const listAllProductCategoryService = async (
   idCategory: string
@@ -14,14 +15,9 @@ export const listAllProductCategoryService = async (
     },
   });
 
-  const listAllProductResponse = listAllProduct.map((element) => {
-    delete element.createdAt;
-    delete element.deletedAt;
-    delete element.updatedAt;
-    delete element.category.createdAt;
-    delete element.category.updatedAt;
-    return element
-  });
+  const categoryReturn = await listAllProdutSchema.validate(listAllProduct,{
+    stripUnknown: true
+}) 
 
-  return listAllProductResponse;
+  return categoryReturn;
 };
