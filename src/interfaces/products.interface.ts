@@ -44,5 +44,11 @@ export interface ICategoryProdResponse {
   price: string;
   in_stock: boolean;
   id: string;
-  
+}
+
+export interface IProductRequestCategory {
+  name: string;
+  category: string;
+  price: string;
+  in_stock: boolean;
 }
