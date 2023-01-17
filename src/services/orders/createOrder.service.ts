@@ -9,6 +9,7 @@ import {
   IOrderRequest,
   IOrderResponse,
 } from "../../interfaces/orders.interface";
+import { createOrderResponseSchema } from "../../schemas/orders.schemas";
 
 export const createOrderService = async ({
   user_id,
@@ -97,5 +98,12 @@ export const createOrderService = async ({
     products: productsInfo,
   };
 
-  return orderReponse;
+  const orderResponseSerializer = createOrderResponseSchema.validate(
+    orderReponse,
+    {
+      stripUnknown: true,
+    }
+  );
+
+  return orderResponseSerializer;
 };
