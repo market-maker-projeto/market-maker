@@ -38,10 +38,10 @@ export interface IProductRequest {
   deletedAt: Date;
 }
 
-// export interface ICategoryProdRequest {
-//   id: string;
-//   name: string;
-//   createdAt: Date;
-//   updatedAt: Date;
-//   deletedAt: Date;
-// }
+export interface ICategoryProdResponse {
+  category: IMockedCategory;
+  name: string;
+  price: string;
+  in_stock: boolean;
+  id: string;
+}
