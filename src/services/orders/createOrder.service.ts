@@ -36,9 +36,17 @@ export const createOrderService = async ({
     id: user_id,
   });
 
+  if (!userInfo) {
+    throw new AppError("user not exist", 404);
+  }
+
   const tableInfo = await tablesRepo.findOneBy({
     id: table_id,
   });
+
+  if (!tableInfo) {
+    throw new AppError("table not exist", 404);
+  }
 
   const foundProducts = await productsRepo.find();
 

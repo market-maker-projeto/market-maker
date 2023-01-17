@@ -25,16 +25,16 @@ export const retrieveOrdersFromTableService = async (
     },
   });
 
+  delete Object.assign(orders, {
+    ["products"]: orders["productsToOrder"],
+  })["productsToOrder"];
+
   const ordersResponse = await retrieveTableAndOrdersSerializer.validate(
     orders,
     {
       stripUnknown: true,
     }
   );
-
-  delete Object.assign(ordersResponse, {
-    ["products"]: orders["productsToOrder"],
-  })["productsToOrder"];
 
   return ordersResponse;
 };

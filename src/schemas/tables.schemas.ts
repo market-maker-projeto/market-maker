@@ -22,30 +22,35 @@ export const retrieveTableAndOrdersSerializer: yup.SchemaOf<any> = yup
             client_name: yup.string().required(),
             user: yup
               .object({
-                id: yup.string().required(),
-                username: yup.string().required(),
-                isAdm: yup.boolean().required(),
+                name: yup.string().notRequired(),
+                id: yup.string().notRequired(),
+                username: yup.string().notRequired(),
+                isAdm: yup.boolean().notRequired(),
               })
-              .required(),
-            products: yup
-              .object({
-                id: yup.string().required(),
-                product: yup
-                  .object({
-                    id: yup.string().required(),
-                    name: yup.string().required(),
-                    price: yup.string().required(),
-                    in_stock: yup.boolean().required(),
-                    category: yup
-                      .object({
-                        id: yup.string().required(),
-                        name: yup.string().required(),
-                      })
-                      .required(),
-                  })
-                  .required(),
-              })
-              .required(),
+              .nullable()
+              .notRequired(),
+            productsToOrder: yup.array(
+              yup
+                .object({
+                  id: yup.string().required(),
+                  product: yup
+                    .object({
+                      id: yup.string().required(),
+                      name: yup.string().required(),
+                      price: yup.string().required(),
+                      in_stock: yup.boolean().required(),
+                      category: yup
+                        .object({
+                          id: yup.string().required(),
+                          name: yup.string().required(),
+                        })
+                        .required(),
+                    })
+                    .nullable()
+                    .notRequired(),
+                })
+                .required()
+            ),
           })
           .required()
       )
