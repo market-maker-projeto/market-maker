@@ -1,6 +1,5 @@
 import AppDataSource from "../../data-source";
 import { Order } from "../../entities/order.entity";
-import { ProductsToOrder } from "../../entities/producstToOrder.entity";
 import { AppError } from "../../errors/AppError";
 
 export const retrieveClosedOrdersService = async (id: any) => {
@@ -16,6 +15,12 @@ export const retrieveClosedOrdersService = async (id: any) => {
   if (!orders.deletedAt) {
     throw new AppError("Order not closed yet", 404);
   }
+
+  delete Object.assign(orders, {
+    ["products"]: orders["productsToOrder"],
+  })["productsToOrder"];
+
+  delete orders.user.password;
 
   return orders;
 };
