@@ -38,9 +38,11 @@ export interface IProductRequest {
   deletedAt: Date;
 }
 
-export interface IProductRequestCategory {
+export interface ICategoryProdResponse {
+  category: IMockedCategory;
   name: string;
-  category: string;
   price: string;
   in_stock: boolean;
+  id: string;
+  
 }
