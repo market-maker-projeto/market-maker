@@ -1,9 +1,10 @@
+import { retrieveTableAndOrdersSerializer } from "./../../schemas/tables.schemas";
 import { AppError } from "./../../errors/AppError";
 import { Table } from "./../../entities/table.entity";
 import AppDataSource from "../../data-source";
 
 export const retrieveOrdersFromTableService = async (
-  tableId
+  tableId: string
 ): Promise<Table> => {
   const tableRepository = AppDataSource.getRepository(Table);
 
@@ -24,5 +25,16 @@ export const retrieveOrdersFromTableService = async (
     },
   });
 
-  return orders;
+  const ordersResponse = await retrieveTableAndOrdersSerializer.validate(
+    orders,
+    {
+      stripUnknown: true,
+    }
+  );
+
+  delete Object.assign(ordersResponse, {
+    ["products"]: orders["productsToOrder"],
+  })["productsToOrder"];
+
+  return ordersResponse;
 };
