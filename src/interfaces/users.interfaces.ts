@@ -1,6 +1,7 @@
 export interface IUser {
   isAdm: boolean;
   username: string;
+  name: string;
   password: string;
 }
 
@@ -11,12 +12,14 @@ export interface IUserLogin {
 export interface IUserReturn {
   username: string;
   isAdm: boolean;
+  name: string;
   id: string;
   createdAt: Date;
   updatedAt: Date;
 }
-export interface IUserUpdate{
+export interface IUserUpdate {
   isAdm?: boolean;
-  username?:string;
+  username?: string;
+  name?: string;
   password?: string;
 }
