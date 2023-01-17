@@ -1,12 +1,13 @@
 import AppDataSource from "../../data-source";
 import { Category } from "../../entities/category.entity";
 import { Product } from "../../entities/product.entity";
-import { ICategoryProdResponse } from "../../interfaces/products.interface";
+import { IProductRequestCategory } from "../../interfaces/products.interface";
+import { listAllProductSchemaArray } from "../../schemas/products.schemas";
 
 export const listAllProductCategoryService = async (
   idCategory: string
-): Promise<ICategoryProdResponse[]> => {
-  const productRepository = await AppDataSource.getRepository(Product);
+): Promise<IProductRequestCategory[]> => {
+  const productRepository = AppDataSource.getRepository(Product);
 
   const listAllProduct = await productRepository.find({
     where: {
@@ -14,14 +15,12 @@ export const listAllProductCategoryService = async (
     },
   });
 
-  const listAllProductResponse = listAllProduct.map((element) => {
-    delete element.createdAt;
-    delete element.deletedAt;
-    delete element.updatedAt;
-    delete element.category.createdAt;
-    delete element.category.updatedAt;
-    return element
-  });
+  const categoryReturn = await listAllProductSchemaArray.validate(
+    listAllProduct,
+    {
+      stripUnknown: true,
+    }
+  );
 
-  return listAllProductResponse;
+  return categoryReturn;
 };
