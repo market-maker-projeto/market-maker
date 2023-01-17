@@ -23,27 +23,19 @@ tablesRoutes.post(
 );
 tablesRoutes.get(
   "",
-  verifyTokenMiddleware,
-  verifyAdminMiddleware,
-  retrieveTablesController
+    retrieveTablesController
 );
 tablesRoutes.get(
   "/:id",
-  verifyTokenMiddleware,
-  verifyAdminMiddleware,
-  retrieveEspecificTableController
+    retrieveEspecificTableController
 );
 tablesRoutes.get(
   "/:id/orders",
-  verifyTokenMiddleware,
-  verifyAdminMiddleware,
-  retrieveOrdersFromTableController
+    retrieveOrdersFromTableController
 );
 tablesRoutes.patch(
   "/:id",
-  verifyTokenMiddleware,
-  verifyAdminMiddleware,
-  updateTableController
+    updateTableController
 );
 tablesRoutes.delete(
   "/:id",

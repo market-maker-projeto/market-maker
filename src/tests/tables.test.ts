@@ -82,7 +82,9 @@ describe("POST /tables", () => {
   });
 
   test("POST /tables - Should not be able to create table without authentication", async () => {
-    const response = await request(app).get(baseUrl).send(mockedTable);
+    const response = await request(app).post(baseUrl).send(mockedTable);
+
+
 
     expect(response.status).toBe(401);
     expect(response.body).toHaveProperty("message");
@@ -142,49 +144,8 @@ describe("POST /tables", () => {
     expect(response.body[0]).toHaveProperty("table_number");
   });
 
-  test("GET /tables - Should not be able to list table not being admin", async () => {
-    const userLoginResponse = await request(app)
-      .post("/login")
-      .send(mockedUserLogin);
-
-    const token = `Bearer ${userLoginResponse.body.token}`;
-
-    const response = await request(app)
-      .get(baseUrl)
-      .set("Authorization", token);
-
-    expect(response.status).toBe(403);
-    expect(response.body).toHaveProperty("message");
-  });
-
-  test("PATCH /tables/:id - Should not be able to update tables without adm permission", async () => {
-    const newValues = { seats: 10 };
-
-    const userLoginResponse = await request(app)
-      .post("/login")
-      .send(mockedUserLogin);
-
-    const admingLoginResponse = await request(app)
-      .post("/login")
-      .send(mockedAdminLogin);
-
-    const userToken = `Bearer ${userLoginResponse.body.token}`;
-    const adminToken = `Bearer ${admingLoginResponse.body.token}`;
-
-    const tableTobeUpdateRequest = await request(app)
-      .get(baseUrl)
-      .set("Authorization", adminToken);
-
-    const tableTobeUpdateId = tableTobeUpdateRequest.body[0].id;
-
-    const response = await request(app)
-      .patch(`${baseUrl}/${tableTobeUpdateId}`)
-      .set("Authorization", userToken)
-      .send(newValues);
-
-    expect(response.status).toBe(403);
-    expect(response.body).toHaveProperty("message");
-  });
+ 
+ 
 
   test("PATCH /tables/:id -  Should be able to update table", async () => {
     const newValues = { seats: 10, isActive: true, table_number: 20 };
