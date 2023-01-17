@@ -11,6 +11,7 @@ import { verifyAdminMiddleware } from "../middlewares/verifyIsAdmin.middleware";
 import { verifyTokenMiddleware } from "../middlewares/verifyToken.middleware";
 import { categorySchema } from "../schemas/categories.schemas";
 import { verifyDataMiddleware } from "../middlewares/verifyData.middleware";
+import { listAllProductSchema } from "../schemas/products.schemas";
 
 export const categoriesRoutes = Router();
 
@@ -21,18 +22,19 @@ categoriesRoutes.post(
   verifyAdminMiddleware,
   createCategoryController
 );
-categoriesRoutes.get(
-  "",
-  verifyTokenMiddleware,
-  retrieveCategoriesController
-);
+categoriesRoutes.get("", verifyTokenMiddleware, retrieveCategoriesController);
 categoriesRoutes.get(
   "/:id",
   verifyTokenMiddleware,
   verifyAdminMiddleware,
   retrieveEspecificCategoryController
 );
-categoriesRoutes.get("/product/:id", verifyTokenMiddleware, listAllProductCategoryController, );
+categoriesRoutes.get(
+  "/product/:id",
+
+  verifyTokenMiddleware,
+  listAllProductCategoryController
+);
 categoriesRoutes.patch(
   "/:id",
   verifyTokenMiddleware,

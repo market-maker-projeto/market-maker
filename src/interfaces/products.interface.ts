@@ -1,8 +1,8 @@
 import { IMockedCategory } from "./categories.interface";
 export interface IProduct {
   category: string;
-  name?: string;
-  price?: string;
+  name: string;
+  price: string;
   in_stock: boolean;
 }
 export interface IProductResponse {
@@ -48,7 +48,7 @@ export interface ICategoryProdResponse {
 
 export interface IProductRequestCategory {
   name: string;
-  category: string;
+  category: any;
   price: string;
   in_stock: boolean;
 }

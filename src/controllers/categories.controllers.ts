@@ -29,10 +29,14 @@ export const retrieveEspecificCategoryController = async (
   return res.status(200).json(listSingleCategory);
 };
 
-export const listAllProductCategoryController = async (req: Request, res: Response) => {
-  const listAllProduct = await listAllProductCategoryService(req.params.id)
-  return res.status(200).json(listAllProduct)
-} 
+export const listAllProductCategoryController = async (
+  req: Request,
+  res: Response
+) => {
+  const listAllProduct = await listAllProductCategoryService(req.params.id);
+
+  return res.status(200).json(listAllProduct);
+};
 
 export const updateCategoryController = async (req: Request, res: Response) => {
   const updatedCategory = await updateCategoryService(req.params.id, req.body);

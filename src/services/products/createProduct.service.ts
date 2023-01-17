@@ -3,11 +3,9 @@ import { Category } from "../../entities/category.entity";
 import { ProductsToOrder } from "../../entities/producstToOrder.entity";
 import { Product } from "../../entities/product.entity";
 import { AppError } from "../../errors/AppError";
-import { IProductRequestCategory } from "../../interfaces/products.interface";
+import { IProduct } from "../../interfaces/products.interface";
 
-export const createProductService = async (
-  productData: IProductRequestCategory
-) => {
+export const createProductService = async (productData: IProduct) => {
   const productRepo = dataSource.getRepository(Product);
   const categoryRepo = dataSource.getRepository(Category);
 
