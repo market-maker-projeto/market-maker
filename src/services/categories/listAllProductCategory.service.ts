@@ -1,17 +1,26 @@
 import AppDataSource from "../../data-source";
 import { Category } from "../../entities/category.entity";
 import { Product } from "../../entities/product.entity";
-import { IProductResponse } from "../../interfaces/products.interface";
+import { IProductRequestCategory } from "../../interfaces/products.interface";
+import { listAllProductSchemaArray } from "../../schemas/products.schemas";
 
 export const listAllProductCategoryService = async (
   idCategory: string
-): Promise<IProductResponse[]> => {
-  const productRepository = await AppDataSource.getRepository(Product);
+): Promise<IProductRequestCategory[]> => {
+  const productRepository = AppDataSource.getRepository(Product);
 
   const listAllProduct = await productRepository.find({
     where: {
       category: { id: idCategory },
-    }
+    },
   });
-  return listAllProduct;
+
+  const categoryReturn = await listAllProductSchemaArray.validate(
+    listAllProduct,
+    {
+      stripUnknown: true,
+    }
+  );
+
+  return categoryReturn;
 };

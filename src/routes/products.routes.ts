@@ -1,4 +1,4 @@
-import { verifyTokenMiddleware } from './../middlewares/verifyToken.middleware';
+import { verifyTokenMiddleware } from "./../middlewares/verifyToken.middleware";
 import {
   createProductController,
   retrieveProductsController,
@@ -8,11 +8,29 @@ import {
 } from "./../controllers/products.controllers";
 import { Router } from "express";
 import { verifyAdminMiddleware } from "../middlewares/verifyIsAdmin.middleware";
+import { verifyDataMiddleware } from "../middlewares/verifyData.middleware";
+import { productsSchema } from "../schemas/products.schemas";
 
 export const productsRoutes = Router();
 
-productsRoutes.post("", verifyTokenMiddleware,verifyAdminMiddleware, createProductController);
+productsRoutes.post(
+  "",
+  verifyDataMiddleware(productsSchema),
+  verifyTokenMiddleware,
+  verifyAdminMiddleware,
+  createProductController
+);
 productsRoutes.get("", retrieveProductsController);
-productsRoutes.get("/:id",retrieveEspecificProductController);
-productsRoutes.patch("/:id", verifyTokenMiddleware,verifyAdminMiddleware, updateProductController);
-productsRoutes.delete("/:id", verifyTokenMiddleware,verifyAdminMiddleware, deleteProductController);
+productsRoutes.get("/:id", retrieveEspecificProductController);
+productsRoutes.patch(
+  "/:id",
+  verifyTokenMiddleware,
+  verifyAdminMiddleware,
+  updateProductController
+);
+productsRoutes.delete(
+  "/:id",
+  verifyTokenMiddleware,
+  verifyAdminMiddleware,
+  deleteProductController
+);
