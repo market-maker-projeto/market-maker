@@ -32,6 +32,7 @@ describe("POST/users", () => {
 
   test("POST /user - Must be able to create a user", async () => {
     const response = await request(app).post(baseUrl).send({
+      name: "morango",
       username: "batata",
       password: "cenoura",
       isAdm: false,

@@ -1,4 +1,5 @@
 export interface IUser {
+  name: string;
   isAdm: boolean;
   username: string;
   password: string;
@@ -15,8 +16,8 @@ export interface IUserReturn {
   createdAt: Date;
   updatedAt: Date;
 }
-export interface IUserUpdate{
+export interface IUserUpdate {
   isAdm?: boolean;
-  username?:string;
+  username?: string;
   password?: string;
 }

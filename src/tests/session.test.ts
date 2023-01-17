@@ -31,11 +31,11 @@ describe("/login", () => {
   });
 
   test("POST /login -  Should be able to login with the user", async () => {
+    await request(app).post("/users").send(mockedUser);
     const response = await request(app).post(baseUrl).send(mockedUserLogin);
 
     expect(response.status).toBe(201);
     expect(response.body).toHaveProperty("token");
-
   });
 
   test("POST /login -  Should be able to login with the user admin", async () => {
@@ -43,7 +43,6 @@ describe("/login", () => {
 
     expect(response.status).toBe(201);
     expect(response.body).toHaveProperty("token");
-
   });
 
   test("POST /login -  Should not be able to login with the user with incorrect password or username", async () => {
