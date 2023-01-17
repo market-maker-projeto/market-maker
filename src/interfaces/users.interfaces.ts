@@ -1,7 +1,7 @@
 export interface IUser {
+  name: string;
   isAdm: boolean;
   username: string;
-  name: string;
   password: string;
 }
 

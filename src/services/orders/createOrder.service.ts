@@ -9,6 +9,7 @@ import {
   IOrderRequest,
   IOrderResponse,
 } from "../../interfaces/orders.interface";
+import { createOrderResponseSchema } from "../../schemas/orders.schemas";
 
 export const createOrderService = async ({
   user_id,
@@ -36,9 +37,17 @@ export const createOrderService = async ({
     id: user_id,
   });
 
+  if (!userInfo) {
+    throw new AppError("user not exist", 404);
+  }
+
   const tableInfo = await tablesRepo.findOneBy({
     id: table_id,
   });
+
+  if (!tableInfo) {
+    throw new AppError("table not exist", 404);
+  }
 
   const foundProducts = await productsRepo.find();
 
@@ -89,5 +98,12 @@ export const createOrderService = async ({
     products: productsInfo,
   };
 
-  return orderReponse;
+  const orderResponseSerializer = createOrderResponseSchema.validate(
+    orderReponse,
+    {
+      stripUnknown: true,
+    }
+  );
+
+  return orderResponseSerializer;
 };
