@@ -20,7 +20,7 @@ export const retrieveOrdersFromTableService = async (
       id: tableId,
     },
     relations: {
-      orders: true,
+      orders: { user: true, productsToOrder: { product: true } },
     },
   });
 

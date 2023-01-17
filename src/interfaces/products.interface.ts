@@ -44,4 +44,5 @@ export interface ICategoryProdResponse {
   price: string;
   in_stock: boolean;
   id: string;
+  
 }

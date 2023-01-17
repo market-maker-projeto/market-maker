@@ -3,19 +3,21 @@ import { Category } from "../../entities/category.entity";
 import { ProductsToOrder } from "../../entities/producstToOrder.entity";
 import { Product } from "../../entities/product.entity";
 import { AppError } from "../../errors/AppError";
-import {
-  IProduct,
-  IProductRequest,
-  IProductResponse,
-} from "../../interfaces/products.interface";
+import { IProductRequestCategory } from "../../interfaces/products.interface";
 
-export const createProductService = async (productData: IProductRequest) => {
+export const createProductService = async (
+  productData: IProductRequestCategory
+) => {
   const productRepo = dataSource.getRepository(Product);
   const categoryRepo = dataSource.getRepository(Category);
 
   const category = await categoryRepo.findOneBy({
-    name: productData.category.name,
+    name: productData.category,
   });
+
+  if (!category) {
+    throw new AppError("Category not found", 404);
+  }
 
   const product = await productRepo.findOneBy({
     name: productData.name,

@@ -42,10 +42,15 @@ describe("POST/products", () => {
       .send(mockedAdminLogin);
     const adminToken = `Bearer ${adminLoginResponse.body.token}`;
 
+    const createCategory = await request(app)
+      .post("/categories")
+      .set("Authorization", adminToken)
+      .send(mockedCategory);
+
     const response = await request(app)
       .post(baseUrl)
       .set("Authorization", adminToken)
-      .send(mockedProduct);
+      .send({ ...mockedProduct, category: createCategory.body.name });
 
     expect(response.status).toBe(201);
     expect(response.body).toHaveProperty("id");
@@ -94,10 +99,15 @@ describe("POST/products", () => {
 
     const adminToken = `Bearer ${adminLoginResponse.body.token}`;
 
+    const createCategory = await request(app)
+      .post("/categories")
+      .set("Authorization", adminToken)
+      .send(mockedCategory);
+
     const response = await request(app)
       .post(baseUrl)
       .set("Authorization", adminToken)
-      .send(invalidProduct);
+      .send({ ...invalidProduct, category: createCategory.body.name });
 
     expect(response.status).toBe(400);
     expect(response.body).toHaveProperty("message");
